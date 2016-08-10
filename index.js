@@ -1,10 +1,4 @@
-#!/usr/bin/env node
-
-/**
- * Module dependencies.
- */
-
-var app = require('../app');
+var app = require('./server/app');
 var debug = require('debug')('password-manager-server:server');
 var http = require('http');
 
