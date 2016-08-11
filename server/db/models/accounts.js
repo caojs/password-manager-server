@@ -3,6 +3,9 @@ require('./users');
 
 const Accounts = bookshelf.Model.extend({
   tableName: 'accounts',
+
+  hasTimestamps: true,
+
   user: function() {
     this.hasOne('Users');
   }

@@ -1,26 +1,26 @@
-const bcrypt = require('bcrypt');
+const Promise = require('bluebird');
+const bcrypt = Promise.promisifyAll(require('bcrypt'));
 const bookshelf = require('../bookshelf');
 require('./accounts');
 
 const Users = bookshelf.Model.extend({
   tableName: 'users',
+
+  hasTimestamps: true,
+
   constructor: function() {
     bookshelf.Model.apply(this, arguments);
+
     this.on('saving', function(model, attrs, options) {
-      return new Promise(function(res, rej) {
-        if (!~attrs.indexOf('password')) {
-          return res();
-        }
-        bcrypt.hash(model.get('password'), 10, function(err, hash) {
-          if (err) {
-            rej(new Error('Error when hashing password.'));
-          }
-          model.set('password', hash);
-          res();
-        });
-      });
+      if (!attrs.password) return;
+      return bcrypt
+        .hashAsync(model.get('password'), 10)
+        .then(hash => model.set('password', hash))
+        .catch(err => { throw err; });
+
     });
   },
+
   accounts: function() {
     this.hasMany('Accounts');
   }

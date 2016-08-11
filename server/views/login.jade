@@ -2,7 +2,21 @@ extends layout
 
 block content
   h1 #{title}
-  form(method="post" action="/login")
-    input(name="username")
-    input(type="password" name="password")
-    button(type="submit") Ok
+  case page
+    when 'create'
+      form(method="post" action="/auth/create")
+        label(for="username") Username
+          input#username(name="username")
+        label(for="password") Password
+          input#password(type="password", name="password")
+        label(for="password-again") Password again
+          input#password-agin(type="password", name="passwordAgain")
+        button(type="submit") Done
+      
+    default
+      form(method="post" action="/auth/login")
+        label(for="username") Username
+          input#username(name="username")
+        label(for="password") Password
+          input#password(type="password" name="password")
+        button(type="submit") Login

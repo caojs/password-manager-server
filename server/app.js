@@ -28,8 +28,9 @@ app.use(session({
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Middlewares
-app.use(require('./middlewares/serializeUser'));
 
+app.use(require('./middlewares/serializeUser'));
+app.use(require('./middlewares/jadeLocals'));
 
 app.use('/auth', authRoutes);
 app.use('/', routes);

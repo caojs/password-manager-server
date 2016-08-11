@@ -6,7 +6,7 @@ module.exports = function(req, res, next) {
   new Users({ id: userId })
     .fetch()
     .then(function (user) {
-      req.user = user;
+      req.user = user.toJSON();
       next();
     })
     .catch(next);
