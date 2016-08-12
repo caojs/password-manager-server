@@ -8,6 +8,8 @@ const Users = bookshelf.Model.extend({
 
   hasTimestamps: true,
 
+  hidden: ['password'],
+
   constructor: function() {
     bookshelf.Model.apply(this, arguments);
 

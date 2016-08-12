@@ -32,6 +32,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(require('./middlewares/serializeUser'));
 app.use(require('./middlewares/jadeLocals'));
 
+var graphqlHTTP = require('express-graphql');
+var schema = require('./db/graphql/schema');
+
+app.use('/graphql', graphqlHTTP(request => ({
+  schema: schema,
+  graphiql: true,
+  context: {
+    user: request.user,
+    session: request.session
+  }
+})));
+
 app.use('/auth', authRoutes);
 app.use('/', routes);
 app.use('/users', users);
