@@ -10,16 +10,22 @@ const postcssReporter = require('postcss-reporter');
 module.exports = require('./base')({
   entry: {
     app: path.resolve(process.cwd(), 'client/app.js'),
-    vendor: ['react', 'react-dom'],
+    vendor: [
+      'react',
+      'react-dom'
+    ],
   },
+
   output: {
     filename: '[name].[chunkhash].js',
     chunkFilename: '[name].[chunkhash].chunk.js',
   },
+
   cssLoaders: ExtractTextPlugin.extract(
     'style-loader',
     'css-loader?modules&-autoprefixer&importLoaders=1!postcss-loader'
   ),
+
   postcssPlugins: [
     cssnext({
       browsers: ['last 2 versions', 'IE > 10'],
@@ -28,6 +34,7 @@ module.exports = require('./base')({
       clearMessages: true,
     }),
   ],
+
   plugins: [
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
@@ -69,4 +76,4 @@ module.exports = require('./base')({
     // Extract the CSS into a seperate file
     new ExtractTextPlugin('[name].[contenthash].css')
   ]
-})
+});
