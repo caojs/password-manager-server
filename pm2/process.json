@@ -2,8 +2,10 @@
     "apps": [{
         "name": "app",
         "script": "index.js",
-        "watch": true,
-        "ignore_watch": [],
+        "watch": ["server"],
+        "max_restarts": 1,
+        "autorestart": false,
+        "ignore_watch": ["node_modules"],
         "env": {
             "NODE_ENV": "development"
         },
