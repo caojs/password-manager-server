@@ -1,31 +1,27 @@
 const path = require('path');
+const express = require('express');
 
 function setupProdMiddleware(app, config = {}) {
   const defaults = require('../../webpack/defaults');
   const outputPath = config.outputPath || defaults.outputPath;
   const publicPath = config.publicPath || defaults.publicPath;
 
-  app.use(publicPath, outputPath);
+  app.use(publicPath, express.static(outputPath));
   app.get('*', (req, res) => res.sendFile(path.resolve(outputPath, 'index.html')));
 }
 
 function setupDevMiddleware(app, config) {
-  const webpack = require('webpack');
-  const wpDev = require('webpack-dev-middleware');
-  const wpHot = require('webpack-hot-middleware');
-  const compiler = webpack(config);
-
-  const devMiddleware = wpDev(compiler, {
+  const compiler = require('webpack')(config);
+  const devMiddleware = require('webpack-dev-middleware')(compiler, {
     publicPath: config.output.publicPath,
     noInfo: true,
     silent: true,
     stats: 'errors-only'
   });
-
   const fs = devMiddleware.fileSystem;
 
   app.use(devMiddleware);
-  app.use(wpHot(compiler));
+  app.use(require('webpack-hot-middleware')(compiler));
 
   app.get('*', (req, res) => {
     fs.readFile(path.join(compiler.outputPath, 'index.html'), (err, file) => {

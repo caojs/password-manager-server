@@ -3,9 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env NODE_ENV=development npm run server",
-    "server": "pm2 start ./pm2/process.json && pm2 logs app --lines 0",
-    "stop": "pm2 delete ./pm2/process.json"
+    "dev:server": "pm2 start ./pm2/process.json && pm2 logs app --lines 0",
+    "start": "npm run dev:server",
+    "stop": "pm2 delete ./pm2/process.json",
+    "live:build": "cross-env NODE_ENV=production webpack --config ./webpack/prod.js",
+    "live:server": "cross-env NODE_ENV=production node index.js",
+    "go": "npm run live:build && npm run live:server"
   },
   "babel": {
     "presets": [
@@ -47,6 +50,9 @@
   "devDependencies": {
     "babel-core": "6.13.2",
     "babel-loader": "6.2.4",
+    "babel-plugin-transform-react-constant-elements": "6.9.1",
+    "babel-plugin-transform-react-inline-elements": "6.8.0",
+    "babel-plugin-transform-react-remove-prop-types": "0.2.9",
     "babel-preset-es2015": "6.13.2",
     "babel-preset-react": "6.11.1",
     "babel-preset-react-hmre": "1.1.1",

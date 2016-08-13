@@ -11,7 +11,7 @@ const postcssReporter = require('postcss-reporter');
 module.exports = require('./base')({
   // Add hot reloading in development
   entry: [
-    // 'eventsource-polyfill', // Necessary for hot reloading with IE
+    'eventsource-polyfill', // Necessary for hot reloading with IE
     'webpack-hot-middleware/client',
     path.join(process.cwd(), 'client/app.js'), // Start with js/app.js
   ],
