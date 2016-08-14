@@ -1,12 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import reducers from './reducers';
+import { Map } from 'immutable';
 
-const Test = React.createClass({
+const store = createStore(reducers, Map({}));
+
+const App = React.createClass({
   render() {
     return (
-      <div>Test</div>
-    )
+      <Provider store={store}>
+        <div>Test</div>
+      </Provider>
+    );
   }
 });
 
-ReactDOM.render(<Test/>, document.getElementById('app'));
+ReactDOM.render(<App/>, document.getElementById('app'));
