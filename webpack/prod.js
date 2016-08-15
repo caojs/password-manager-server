@@ -2,14 +2,12 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-
-// PostCSS plugins
 const cssnext = require('postcss-cssnext');
 const postcssReporter = require('postcss-reporter');
 
 module.exports = require('./base')({
   entry: {
-    app: path.resolve(process.cwd(), 'client/app.js'),
+    app: path.resolve(process.cwd(), 'client/Root.js'),
     vendor: [
       'react',
       'react-dom'

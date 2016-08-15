@@ -1,5 +1,6 @@
-module.exports = (state, action) => {
+export default (state, action) => {
   switch (action.type) {
-    default: return state;
+    default:
+      return state;
   }
 };
