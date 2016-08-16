@@ -3,8 +3,8 @@ const router = express.Router();
 const auth = require('../middlewares/auth');
 
 router
-  .post('/login', auth.login)
-  .get('/logout', auth.logout)
-  .post('/create', auth.create);
+  .post('/signin', auth.login)
+  .get('/signout', auth.logout)
+  .post('/signup', auth.create);
 
 module.exports = router;

@@ -38,7 +38,7 @@ function login(req, res, next) {
 function logout(req, res, next) {
   req.session.destroy(function(err) {
     if (err) return next(err);
-    res.redirect('/login');
+    res.redirect('/signin');
   });
 }
 
