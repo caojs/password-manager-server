@@ -6,8 +6,6 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const graphqlHTTP = require('express-graphql');
 
-const authRoutes = require('./routes/auth');
-const routes = require('./routes/index');
 const schema = require('./db/graphql/schema');
 
 const app = express();
@@ -21,9 +19,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session({ secret: 'oppa', resave: false, saveUninitialized: false }));
 app.use(require('./middlewares/serializeUser'));
-app.use(require('./middlewares/jadeLocals'));
 
 // Api
+
+// Graphql
 app.use('/graphql', graphqlHTTP(request => ({
   schema: schema,
   graphiql: true,
@@ -33,10 +32,11 @@ app.use('/graphql', graphqlHTTP(request => ({
   }
 })));
 
-app.use('/auth', authRoutes);
+// Authentication
+app.use(require('./routes/auth'));
 
 // static middleware and webpack
-require('./middlewares/setup')(app)
+require('./setupRendering')(app);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

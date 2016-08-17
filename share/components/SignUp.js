@@ -3,7 +3,7 @@ import React from 'react';
 class SignUp extends React.Component {
   render() {
     return (
-      <form method="post" action="/auth/signup">
+      <form method="post" action="/signup">
         <label>
           Username:
           <input name="username"/>

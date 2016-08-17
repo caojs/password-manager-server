@@ -19,7 +19,8 @@
     "env": {
       "production": {
         "only": [
-          "client"
+          "client",
+          "share"
         ],
         "plugins": [
           "transform-react-remove-prop-types",
@@ -30,6 +31,7 @@
     }
   },
   "dependencies": {
+    "babel-register": "6.11.6",
     "bcrypt": "0.8.7",
     "body-parser": "~1.15.1",
     "bookshelf": "0.10.0",

@@ -38,7 +38,7 @@ function login(req, res, next) {
 function logout(req, res, next) {
   req.session.destroy(function(err) {
     if (err) return next(err);
-    res.redirect('/signin');
+    res.redirect('/login');
   });
 }
 
@@ -62,7 +62,7 @@ function canCreate(username, password, passwordAgain) {
     });
 }
 
-function create(req, res, next) {
+function signup(req, res, next) {
   const {
     username,
     password,
@@ -76,4 +76,4 @@ function create(req, res, next) {
 
 exports.login = login;
 exports.logout = logout;
-exports.create = create;
+exports.signup = signup;

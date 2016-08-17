@@ -1,3 +1,6 @@
+// All subsequent files required by node with the extensions .es6, .es, .jsx and .js will be transformed by Babel.
+require('babel-register');
+
 var app = require('./server/app');
 var debug = require('debug')('password-manager-server:server');
 var http = require('http');
