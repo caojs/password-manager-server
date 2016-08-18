@@ -51,6 +51,9 @@ module.exports = require('./base')({
       compress: {
         warnings: false,
       },
+      mangle: {
+        except: ['fetch']
+      }
     }),
 
     // Minify and optimize the index.html

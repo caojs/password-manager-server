@@ -16,12 +16,12 @@
       "react",
       "stage-2"
     ],
+    "only": [
+      "client",
+      "share"
+    ],
     "env": {
       "production": {
-        "only": [
-          "client",
-          "share"
-        ],
         "plugins": [
           "transform-react-remove-prop-types",
           "transform-react-constant-elements",
@@ -42,6 +42,7 @@
     "express-session": "1.14.0",
     "graphql": "0.6.2",
     "immutable": "3.8.1",
+    "isomorphic-fetch": "2.2.1",
     "knex": "0.11.9",
     "morgan": "~1.7.0",
     "pug": "2.0.0-beta5",

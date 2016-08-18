@@ -19,10 +19,12 @@ function sendHtml(html, req, res) {
       res.status(500).send(err.message);
     }
     else if(redirectLocation) {
+      console.log('redirect');
       res.redirect(302, redirectLocation.pathname + redirectLocation.search)
     }
     else if(renderProps){
       // TODO: load data using renderProps.routes.components
+      // const components = renderProps.routes.components;
       const router = createElement(RouterContext, renderProps);
       const root = createRootElement({}, router);
       res.send(interpolateHtml(html, {}, root));

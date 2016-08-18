@@ -1,10 +1,10 @@
 import React from 'react';
 import { Route, IndexRoute, Redirect } from 'react-router';
 import Layout from './components/Layout.js';
-import Dashboard from './components/Dashboard.js';
 import LogIn from './components/LogIn.js';
 import SignUp from './components/SignUp.js';
 import NotFound from './components/NotFound.js';
+import Dashboard from './components/Dashboard.js';
 
 const routes = (
   <Route path="/" component={Layout}>

@@ -4,7 +4,7 @@ class Layout extends React.Component {
   render() {
     return (
       <div className="layout">
-      {this.props.children}
+        {this.props.children}
       </div>
     );
   }
