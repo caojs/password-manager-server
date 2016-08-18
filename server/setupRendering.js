@@ -1,11 +1,14 @@
+const fs = require('fs');
 const path = require('path');
 const express = require('express');
-const fs = require('fs');
 const { createElement } = require('react');
 const { renderToString } = require('react-dom/server');
 const { match, RouterContext } = require('react-router');
+const { isFunction, forEach } = require('lodash');
+
 const routes = require('../share/routes.js').default;
-const createRootElement = require('../share/createRootElement').default;
+const createStore = require('../share/store.js').default;
+const createRootElement = require('../share/createRootElement.js').default;
 
 function interpolateHtml(html, state, element) {
   return html
@@ -13,24 +16,70 @@ function interpolateHtml(html, state, element) {
     .replace('${app}', renderToString(element));
 }
 
+function getPreLoads(components) {
+  return components
+    .reduce((accumulator, c) => {
+      if (isFunction(c)) {
+        return isFunction(c.preLoad) ?
+          accumulator.concat(c.preLoad) :
+          accumulator;
+      }
+
+      forEach(c, v => {
+        if (isFunction(v.preLoad)) { accumulator.push(v.preLoad); }
+      });
+
+      return accumulator;
+    }, []);
+}
+
+function loadInitData(components, params) {
+  return Promise.all(
+    getPreLoads(components)
+      .map(preLoad => Promise.resolve(preLoad(params)))
+  );
+}
+
 function sendHtml(html, req, res) {
   match({ routes , location: req.url }, (err, redirectLocation, renderProps) => {
     if (err) {
-      res.status(500).send(err.message);
+      res
+        .status(500)
+        .send(err.message);
     }
+
     else if(redirectLocation) {
-      console.log('redirect');
-      res.redirect(302, redirectLocation.pathname + redirectLocation.search)
+      const {
+        pathname,
+        search
+      } = redirectLocation;
+      res.redirect(302, pathname + search);
     }
+
     else if(renderProps){
-      // TODO: load data using renderProps.routes.components
-      // const components = renderProps.routes.components;
-      const router = createElement(RouterContext, renderProps);
-      const root = createRootElement({}, router);
-      res.send(interpolateHtml(html, {}, root));
+      const {
+        components,
+        params
+      } = renderProps;
+      const store = createStore({});
+
+      loadInitData(components, { store , params })
+        .then(() => {
+          const router = createElement(RouterContext, renderProps);
+          const root = createRootElement(store, router);
+          res.send(interpolateHtml(html, store.getState().toJS(), root));
+        })
+        .catch((err) => {
+          res
+            .status(500)
+            .send(err.message);
+        });
     }
+
     else {
-      res.status(404).send('Not found!');
+      res
+        .status(404)
+        .send('Not found!');
     }
   });
 }

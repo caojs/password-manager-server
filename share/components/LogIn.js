@@ -1,6 +1,9 @@
 import React from 'react';
 
-class SignIn extends React.Component {
+class LogIn extends React.Component {
+  static preLoad({ params, store }) {
+  }
+
   render() {
     return (
       <form method="post" action="/login">
@@ -18,4 +21,4 @@ class SignIn extends React.Component {
   }
 }
 
-export default SignIn;
+export default LogIn;

@@ -11,7 +11,7 @@ const routes = (
     <IndexRoute component={Dashboard}/>
     <Route path="login" component={LogIn}/>
     <Route path="signup" component={SignUp}/>
-    <Route path="/404" component={NotFound}/>
+    <Route path="404" component={NotFound}/>
     <Redirect from="*" to="/404"/>
   </Route>
 );

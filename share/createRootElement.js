@@ -4,9 +4,7 @@ import { Provider } from 'react-redux';
 import { Map } from 'immutable';
 import createStore from './store';
 
-export default function createRootElement(initialState = {}, router) {
-  const store = createStore(Map(initialState));
-
+export default function createRootElement(store, router) {
   let Component = router;
 
   if (process.env.NODE_ENV === 'development') {
