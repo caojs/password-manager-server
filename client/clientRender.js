@@ -2,8 +2,8 @@ import { createElement } from 'react';
 import { render } from 'react-dom';
 import { Router, browserHistory } from 'react-router';
 import routes from '../share/routes';
-import createStore from '../share/store.js';
-import createRootElement from '../share/createRootElement.js';
+import createStore from '../share/store';
+import createRootElement from '../share/createRootElement';
 
 const initState = typeof _INIT_STATE_ !== 'undefined' && _INIT_STATE_ || {};
 const root = createRootElement(

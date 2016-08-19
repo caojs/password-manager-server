@@ -7,7 +7,7 @@ const postcssReporter = require('postcss-reporter');
 
 module.exports = require('./base')({
   entry: {
-    app: path.resolve(process.cwd(), 'client/clientRender.js'),
+    app: path.join(process.cwd(), 'client/clientRender.js'),
     vendor: [
       'react',
       'react-dom',
