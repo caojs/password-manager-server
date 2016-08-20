@@ -19,10 +19,14 @@ function featuresDetect() {
         resolve();
       });
     }
+    else {
+      resolve();
+    }
   });
 }
 
 featuresDetect()
   .then(function() {
+    console.log('render....')
     render(root, document.getElementById('app'));
   });
