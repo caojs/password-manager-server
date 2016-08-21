@@ -8,7 +8,7 @@ const { isFunction, forEach } = require('lodash');
 
 const routes = require('../share/routes.js').default;
 const createStore = require('../share/store.js').default;
-const createRootElement = require('../share/createRootElement.js').default;
+const Root = require('../share/Root.js').default;
 
 function interpolateHtml(html, state, element) {
   return html
@@ -65,7 +65,7 @@ function sendHtml(html, req, res, next) {
       loadInitData(components, { store , params })
         .then(() => {
           const router = createElement(RouterContext, renderProps);
-          const root = createRootElement(store, router);
+          const root = createElement(Root, { store, children: router });
           res.send(interpolateHtml(html, store.getState().toJS(), root));
         })
         .catch(next);
