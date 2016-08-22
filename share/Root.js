@@ -1,7 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
-let main = null;
 let devTools = null;
 
 if(process.env.NODE_ENV === 'development') {
@@ -10,14 +9,9 @@ if(process.env.NODE_ENV === 'development') {
 }
 
 class Root extends React.Component {
-  componentWillMount() {
-    // prevent change props
-    this.store = this.props.store;
-  }
-
   render() {
     return (
-      <Provider store={this.store}>
+      <Provider store={this.props.store}>
         <div>
           {this.props.children}
           {devTools}

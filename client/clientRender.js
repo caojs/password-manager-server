@@ -1,10 +1,9 @@
 import React, { createElement } from 'react';
-import { render } from 'react-dom';
+import { unmountComponentAtNode, render } from 'react-dom';
 import { Router, browserHistory } from 'react-router';
 import routes from '../share/routes.js';
 import createStore from '../share/store.js';
 import Root from '../share/Root.js';
-import reducers from '../share/reducers.js';
 
 const initState = typeof _INIT_STATE_ !== 'undefined' && _INIT_STATE_ || {};
 const store = createStore(initState);
@@ -23,22 +22,35 @@ function featuresDetect() {
   });
 }
 
-function renderAll(key) {
+function renderAll(store, routes) {
   const root = (
     <Root store={store}>
       <Router
         history={browserHistory}
-        key={key}
         routes={routes}/>
     </Root>
-  )
-  render(root, document.getElementById('app'));
+  );
+  const app = document.getElementById('app');
+  unmountComponentAtNode(app);
+  render(root, app);
+
+  console.group('%cApp:', 'color: orange');
+  console.info('Unmount and rerender app.');
+  console.warn('Store still remains.');
+  console.groupEnd();
 }
 
 featuresDetect()
   .then(function() {
-    renderAll(0);
+    renderAll(store, routes);
+
     if (module.hot) {
-      module.hot.accept(() => renderAll(Math.random()));
+      module.hot.accept();
+
+      // React-router doesn't accept to change routes props.
+      // Everytime routes module changes, we will force full rerender.
+      module.hot.accept('../share/routes.js', () => {
+        renderAll(store, require('../share/routes.js').default);
+      });
     }
   });
