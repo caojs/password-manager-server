@@ -12,8 +12,10 @@ exports.up = function(knex, Promise) {
 
     knex.schema.createTable('accounts', function(t) {
       t.increments('id');
+      t.string('title').notNullable();
       t.string('account').notNullable();
       t.string('account_password').notNullable();
+      t.string('info');
       t.integer('user_id').notNullable();
       t.dateTime('created_at');
       t.dateTime('updated_at');
