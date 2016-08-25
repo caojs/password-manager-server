@@ -3,12 +3,13 @@ import { unmountComponentAtNode, render } from 'react-dom';
 import { Router, browserHistory } from 'react-router';
 import { ReduxAsyncConnect } from 'redux-connect';
 
-import routes from '../share/routes.js';
+import getRoutes from '../share/routes.js';
 import createStore from '../share/store.js';
 import Root from '../share/Root.js';
 
 const initState = typeof _INIT_STATE_ !== 'undefined' && _INIT_STATE_ || {};
 const store = createStore(initState);
+const routes = getRoutes(store);
 
 function featuresDetect() {
   return new Promise(function(resolve) {
@@ -53,7 +54,7 @@ featuresDetect()
       // React-router doesn't accept to change routes props.
       // Everytime routes module changes, we will force full rerender.
       module.hot.accept('../share/routes.js', () => {
-        renderAll(store, require('../share/routes.js').default);
+        renderAll(store, require('../share/routes.js').default(store));
       });
     }
   });

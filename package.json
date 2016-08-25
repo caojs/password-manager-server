@@ -56,7 +56,8 @@
     "redux-actions": "0.11.0",
     "redux-connect": "3.0.0",
     "serve-favicon": "~2.3.0",
-    "sqlite3": "3.1.4"
+    "sqlite3": "3.1.4",
+    "util-arity": "1.0.2"
   },
   "devDependencies": {
     "babel-core": "6.13.2",

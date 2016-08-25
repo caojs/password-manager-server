@@ -6,18 +6,25 @@ const { renderToString } = require('react-dom/server');
 const { match, RouterContext } = require('react-router');
 const { ReduxAsyncConnect, loadOnServer } = require('redux-connect');
 
-const routes = require('../share/routes.js').default;
+const getRoutes = require('../share/routes.js').default;
 const createStore = require('../share/store.js').default;
 const Root = require('../share/Root.js').default;
 
-function interpolateHtml(html, elementString, state) {
+function interpolateHtml(html, appHTML, state) {
   return html
     .replace('${initState}', JSON.stringify(state))
-    .replace('${app}', elementString);
+    .replace('${app}', appHTML);
 }
 
 function sendHtml(html, req, res, next) {
-  match({ routes , location: req.url }, (err, redirectLocation, renderProps) => {
+  const store = createStore({ user: req.user });
+  const routes = getRoutes(store);
+
+  match({
+    routes,
+    location: req.url
+  }, (err, redirectLocation, renderProps) => {
+
     if (err) {
       next(err);
     }
@@ -31,7 +38,6 @@ function sendHtml(html, req, res, next) {
     }
 
     else if(renderProps){
-      const store = createStore({});
 
       loadOnServer(Object.assign({ store }, renderProps))
         .then(() => {
