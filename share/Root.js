@@ -9,12 +9,23 @@ if(process.env.NODE_ENV === 'development') {
 }
 
 class Root extends React.Component {
+  constructor(props, context) {
+    super(props);
+    this.state = {};
+  }
+
+  componentDidMount() {
+    if (devTools) {
+      this.setState({ devTools });
+    }
+  }
+
   render() {
     return (
       <Provider store={this.props.store}>
         <div>
           {this.props.children}
-          {devTools}
+          {this.state.devTools}
         </div>
       </Provider>
     );
