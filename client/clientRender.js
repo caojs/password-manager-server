@@ -1,6 +1,8 @@
 import React, { createElement } from 'react';
 import { unmountComponentAtNode, render } from 'react-dom';
 import { Router, browserHistory } from 'react-router';
+import { ReduxAsyncConnect } from 'redux-connect';
+
 import routes from '../share/routes.js';
 import createStore from '../share/store.js';
 import Root from '../share/Root.js';
@@ -27,7 +29,8 @@ function renderAll(store, routes) {
     <Root store={store}>
       <Router
         history={browserHistory}
-        routes={routes}/>
+        routes={routes}
+        render={(props) => <ReduxAsyncConnect {...props}/>}/>
     </Root>
   );
   const app = document.getElementById('app');

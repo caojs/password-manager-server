@@ -4,41 +4,16 @@ const express = require('express');
 const { createElement } = require('react');
 const { renderToString } = require('react-dom/server');
 const { match, RouterContext } = require('react-router');
-const { isFunction, forEach } = require('lodash');
+const { ReduxAsyncConnect, loadOnServer } = require('redux-connect');
 
 const routes = require('../share/routes.js').default;
 const createStore = require('../share/store.js').default;
 const Root = require('../share/Root.js').default;
 
-function interpolateHtml(html, state, element) {
+function interpolateHtml(html, elementString, state) {
   return html
     .replace('${initState}', JSON.stringify(state))
-    .replace('${app}', renderToString(element));
-}
-
-function getPreLoads(components) {
-  return components
-    .reduce((accumulator, c) => {
-
-      if (isFunction(c)) {
-        return isFunction(c.preLoad) ?
-          accumulator.concat(c.preLoad) :
-          accumulator;
-      }
-
-      forEach(c, v => {
-        if (isFunction(v.preLoad)) { accumulator.push(v.preLoad); }
-      });
-
-      return accumulator;
-    }, []);
-}
-
-function loadInitData(components, params) {
-  return Promise.all(
-    getPreLoads(components)
-      .map(preLoad => Promise.resolve(preLoad(params)))
-  );
+    .replace('${app}', elementString);
 }
 
 function sendHtml(html, req, res, next) {
@@ -56,17 +31,18 @@ function sendHtml(html, req, res, next) {
     }
 
     else if(renderProps){
-      const {
-        components,
-        params
-      } = renderProps;
       const store = createStore({});
 
-      loadInitData(components, { store , params })
+      loadOnServer(Object.assign({ store }, renderProps))
         .then(() => {
-          const router = createElement(RouterContext, renderProps);
-          const root = createElement(Root, { store, children: router });
-          res.send(interpolateHtml(html, store.getState().toJS(), root));
+          const appHTML = renderToString(
+            createElement(Root, {
+              store,
+              children: createElement(ReduxAsyncConnect, renderProps)
+            })
+          );
+
+          res.send(interpolateHtml(html, appHTML, store.getState().toJS()));
         })
         .catch(next);
     }
