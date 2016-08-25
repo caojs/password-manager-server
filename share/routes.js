@@ -23,10 +23,12 @@ const routes = (
         components={{ sidebar: Sidebar, main: AccountForm }}/>
       <Route
         path='edit/:id'
-        components={{ sidebar: Sidebar, main: AccountForm }}/>
+        components={{ sidebar: Sidebar, main: AccountForm }}
+        onEnter={() => {/*TODO: preLoad*/}}/>
       <Route
         path=':id'
-        components={{ sidebar: Sidebar, main: AccountForm }}/>
+        components={{ sidebar: Sidebar, main: AccountForm }}
+        onEnter={() => {/*TODO: preLoad*/}}/>
     </Route>
     <Redirect from='*' to='/404'/>
   </Route>
