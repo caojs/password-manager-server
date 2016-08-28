@@ -7,8 +7,8 @@ const Dashboard = ({ sidebar, main }) => (
   </div>
 );
 
-Dashboard.onEnter = (nextState, replace, store) => {
-  const user = store.getState().get('user');
+Dashboard.onEnter = (nextState, replace, { getState }) => {
+  const user = getState().get('user');
   if (!user) {
     replace('/login');
   }

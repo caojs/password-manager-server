@@ -2,6 +2,12 @@ const Promise = require('bluebird');
 const bcrypt = Promise.promisifyAll(require('bcrypt'));
 const { Users } = require('../db');
 
+function flashError(req, res, err) {
+  const isDev = req.app.get('env') === 'development';
+  req.flash('error', [err.message].concat(isDev ? err.stack : null));
+  res.redirect(req.url);
+}
+
 function canLogin(username, password) {
   return new Users({ username: username })
     .fetch()
@@ -32,7 +38,7 @@ function login(req, res, next) {
       req.session.userId = userId;
       res.redirect('/');
     })
-    .catch(next);
+    .catch(err => flashError(req, res, err));
 }
 
 function logout(req, res, next) {
@@ -71,7 +77,7 @@ function signup(req, res, next) {
 
   return canCreate(username, password, passwordAgain)
     .then(() => login(req, res, next))
-    .catch(next);
+    .catch(err => flashError(req, res, err));
 }
 
 exports.login = login;

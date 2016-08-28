@@ -1,7 +1,18 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import Immutable from 'immutable';
 
-const SignUp = () => (
+const SignUp = ({ error }) => (
   <form method="post" action="/signup">
+
+    {error.size ?
+      <ul>
+        {error.map((message, index) => (
+          <li key={index}>{message}</li>
+        ))}
+      </ul> :
+      null}
+
     <label>
       Username:
       <input name="username"/>
@@ -18,4 +29,8 @@ const SignUp = () => (
   </form>
 )
 
-export default SignUp;
+export default connect(
+  (state) => ({
+    error: state.getIn(['flash', 'error'], Immutable.List())
+  })
+)(SignUp);

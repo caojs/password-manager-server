@@ -3,8 +3,10 @@ const path = require('path');
 const favicon = require('serve-favicon');
 const logger = require('morgan');
 const session = require('express-session');
+const flash = require('connect-flash');
 const bodyParser = require('body-parser');
 const graphqlHTTP = require('express-graphql');
+const cookie = require('cookie');
 
 const schema = require('./db/graphql/schema');
 
@@ -18,17 +20,17 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session({ secret: 'oppa', resave: false, saveUninitialized: false }));
+app.use(flash());
 app.use(require('./middlewares/serializeUser'));
-
-// Api
+app.use(require('./middlewares/cookieFetch'));
 
 // Graphql
-app.use('/graphql', graphqlHTTP(request => ({
+app.use('/graphql', graphqlHTTP(req => ({
   schema: schema,
   graphiql: true,
   context: {
-    user: request.user,
-    session: request.session
+    user: req.user,
+    session: req.session
   }
 })));
 
@@ -47,26 +49,7 @@ app.use(function(req, res, next) {
 
 // error handlers
 
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err
-    });
-  });
-}
-
-// production error handler
-// no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
-});
+//TODO: need consider
+app.use(require('errorhandler')());
 
 module.exports = app;

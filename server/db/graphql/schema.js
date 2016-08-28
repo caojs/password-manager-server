@@ -55,7 +55,7 @@ const Query = new GraphQLObjectType({
 
     accounts: {
       type: new GraphQLList(Account),
-      resolve: (source, { userId }, { user }) => {
+      resolve: (source, params, { user }) => {
         if (!user)
           throw new Error(`Don't have permissions.`);
 

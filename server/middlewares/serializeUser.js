@@ -1,13 +1,22 @@
 const { Users } = require('../db');
 
-module.exports = function(req, res, next) {
+function exportUser(userId, req, res) {
+  return new Users({ id: userId })
+    .fetch()
+    .then(user => {
+      if (user) {
+        req.user = user.toJSON();
+        res.locals.user = req.user;
+      }
+    });
+}
+
+function middleware(req, res, next) {
   var userId = req.session && req.session.userId;
   if (!userId) { return next(); }
-  new Users({ id: userId })
-    .fetch()
-    .then(function (user) {
-      req.user = user.toJSON();
-      next();
-    })
+  exportUser(userId, req, res)
+    .then(() => next())
     .catch(next);
 };
+
+module.exports = middleware;

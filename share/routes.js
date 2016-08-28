@@ -17,8 +17,14 @@ export default (store) => {
 
   return (
     <Route path='/' component={Layout}>
-      <Route path='login' component={LogIn}/>
-      <Route path='signup' component={SignUp}/>
+      <Route
+        path='login'
+        component={LogIn}
+        onEnter={storeContext(LogIn.onEnter)}/>
+      <Route
+        path='signup'
+        component={SignUp}
+        onEnter={storeContext(LogIn.onEnter)}/>
       <Route path='404' component={NotFound}/>
       <Route
         component={Dashboard}

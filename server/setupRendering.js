@@ -17,7 +17,10 @@ function interpolateHtml(html, appHTML, state) {
 }
 
 function sendHtml(html, req, res, next) {
-  const store = createStore({ user: req.user });
+  const store = createStore({
+    user: req.user,
+    flash: req.flash()
+  });
   const routes = getRoutes(store);
 
   match({

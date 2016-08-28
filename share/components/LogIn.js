@@ -1,7 +1,18 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import Immutable from 'immutable';
 
-const LogIn = () => (
+const LogIn = ({ error }) => (
   <form method="post" action="/login">
+
+    {error.size ?
+      <ul>
+        {error.map((message, index) => (
+          <li key={index}>{message}</li>
+        ))}
+      </ul> :
+      null}
+
     <label>
       Username:
       <input name="username"/>
@@ -12,6 +23,17 @@ const LogIn = () => (
     </label>
     <button type="submit">Sign In</button>
   </form>
-)
+);
 
-export default LogIn;
+LogIn.onEnter = (nextState, replace, { getState }) => {
+  const user = getState().get('user');
+  if (user) {
+    replace('/');
+  }
+};
+
+export default connect(
+  (state) => ({
+    error: state.getIn(['flash', 'error'], Immutable.List())
+  })
+)(LogIn);
