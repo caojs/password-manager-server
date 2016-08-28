@@ -12,13 +12,10 @@ function cookieFetch(fetch, cookie) {
 
 function middleware(req, res, next) {
   const kuki = req.headers.cookie;
-  if (kuki) {
-    global.fetch = cookieFetch(realFetch, kuki);
-    next();
-  }
-  else {
-    next();
-  }
+  global.fetch = kuki ?
+    cookieFetch(realFetch, kuki) :
+    realFetch;
+  next();
 }
 
 module.exports = middleware;

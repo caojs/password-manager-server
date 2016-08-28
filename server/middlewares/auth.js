@@ -42,10 +42,10 @@ function login(req, res, next) {
 }
 
 function logout(req, res, next) {
-  req.session.destroy(function(err) {
-    if (err) return next(err);
-    res.redirect('/login');
-  });
+  delete req.user;
+  if (req.locals && req.locals.user) { delete req.locals.user; }
+  if (req.session && req.session.userId) { delete req.session.userId; }
+  res.redirect('/login');
 }
 
 function canCreate(username, password, passwordAgain) {
