@@ -23,14 +23,17 @@ const User = new GraphQLObjectType({
 const Account = new GraphQLObjectType({
   name: 'Account',
   fields: {
-    user_id: {
-      type: GraphQLID
+    id: { type: new GraphQLNonNull(GraphQLID) },
+    title: { type: new GraphQLNonNull(GraphQLString) },
+    info: { type: GraphQLString },
+    account: { type: new GraphQLNonNull(GraphQLString) },
+    password: {
+      type: new GraphQLNonNull(GraphQLString),
+      resolve: source => source['account_password']
     },
-    account: {
-      type: GraphQLString
-    },
-    account_password: {
-      type: GraphQLString
+    userId: {
+      type: new GraphQLNonNull(GraphQLID),
+      resolve: source => source['user_id']
     }
   }
 });
@@ -40,14 +43,11 @@ const Query = new GraphQLObjectType({
   fields: {
     user: {
       type: User,
-      args: {
-        id: { type: new GraphQLNonNull(GraphQLID) }
-      },
       resolve: (source, params, { user }) => {
-        if (!user || (+user.id !== +params.id ))
+        if (!user)
           throw new Error(`Don't have permissions.`);
 
-        return new Users(params)
+        return new Users({ id: user.id })
           .fetch()
           .then(user => user && user.toJSON());
       }
@@ -73,15 +73,23 @@ const Mutation = new GraphQLObjectType({
     account: {
       type: Account,
       args: {
+        title: { type: new GraphQLNonNull(GraphQLString) },
         account: { type: new GraphQLNonNull(GraphQLString) },
-        password: { type: new GraphQLNonNull(GraphQLString) }
+        password: { type: new GraphQLNonNull(GraphQLString) },
+        info: { type: GraphQLString }
       },
-      resolve: (source, { account, password }, { user }) => {
+      resolve: (source, { title, account, password, info }, { user }) => {
         if (!user)
           throw new Error(`This action is impossible to perform without login.`)
 
         return new Accounts()
-          .save({ account, account_password: password, user_id: user.id })
+          .save({
+            title,
+            info,
+            account,
+            account_password: password,
+            user_id: user.id
+          })
           .then(account => account.toJSON());
       }
     }

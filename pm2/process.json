@@ -2,7 +2,10 @@
     "apps": [{
         "name": "app",
         "script": "index.js",
-        "watch": ["server", "share"],
+        "watch": [
+          "server",
+          /*"share"*/
+        ],
         "max_restarts": 1,
         "autorestart": false,
         "ignore_watch": ["node_modules"],

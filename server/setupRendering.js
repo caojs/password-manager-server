@@ -6,9 +6,9 @@ const { renderToString } = require('react-dom/server');
 const { match, RouterContext } = require('react-router');
 const { ReduxAsyncConnect, loadOnServer } = require('redux-connect');
 
-const getRoutes = require('../share/routes.js').default;
-const createStore = require('../share/store.js').default;
-const Root = require('../share/Root.js').default;
+const getRoutes = require('../share/routes').default;
+const createStore = require('../share/store').default;
+const Root = require('../share/Root').default;
 
 function interpolateHtml(html, appHTML, state) {
   return html

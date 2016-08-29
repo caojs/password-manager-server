@@ -6,8 +6,8 @@ import {
   immutableReducer as reduxAsyncConnect
 } from 'redux-connect';
 
-import enhancers from './enhancers.js';
-import reducers from './reducers.js';
+import enhancers from './enhancers';
+import reducers from './reducers';
 
 setToImmutableStateFunc((mutableState) => fromJS(mutableState));
 setToMutableStateFunc((immutableState) => immutableState.toJS());
@@ -26,7 +26,7 @@ export default function(initialState) {
 
   if (module.hot) {
     module.hot.accept('./reducers',
-      () => store.replaceReducer(reducersCreator(require('./reducers.js').default))
+      () => store.replaceReducer(reducersCreator(require('./reducers').default))
     );
   }
 

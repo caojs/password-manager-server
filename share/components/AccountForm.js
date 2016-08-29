@@ -1,8 +1,12 @@
 import React from 'react';
 import Immutable from 'immutable';
 import { connect } from 'react-redux';
-import { compose, withHandlers, withReducer, mapProps } from 'recompose';
+import compose from 'recompose/compose';
+import withHandlers from 'recompose/withHandlers';
+import withReducer from 'recompose/withReducer';
+import withProps from 'recompose/withProps';
 
+import { addAccount } from '../actionCreators';
 import PasswordGenerator from './PasswordGenerator';
 
 const reducer = (state, action) => {
@@ -11,17 +15,30 @@ const reducer = (state, action) => {
 };
 
 const enhance = compose(
-  withReducer('form', 'dispatch', reducer, Immutable.Map({})),
-  mapProps(({ form, dispatch, onSubmit }) => ({
-    form,
-    onSubmit,
-    dispatch,
-    change: (type, payload) => dispatch({ type, payload }),
+  connect(null, { addAccount }),
+  withReducer('form', 'change', reducer, Immutable.Map({})),
+  withProps(props => ({
+    change: (type, payload) => props.change({ type, payload })
   })),
   withHandlers({
-    onSubmit: props => e => {
-      console.log(props);
+    onSubmit: ({ addAccount, form }) => e => {
       e.preventDefault();
+      addAccount(`
+        mutation {
+          account(
+            title: "${form.get('title', '')}",
+            account: "${form.get('account', '')}",
+            password: "${form.get('password', '')}",
+            info: "${form.get('info', '')}"
+          ) {
+            id,
+            title,
+            account,
+            password,
+            info,
+            userId
+          }
+        }`);
     }
   }),
 );

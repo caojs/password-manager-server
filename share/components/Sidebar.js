@@ -32,19 +32,31 @@ export default asyncConnect([
   {
     key: 'accounts',
     promise: (props) => {
-      return fetch(`http://localhost:3000/graphql?query=
-        {
-          accounts {
-            account,
-            account_password
-          }
-        }
-      `)
+      return fetch('http://localhost:3000/graphql', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          query: `
+            {
+              accounts {
+                id,
+                title,
+                info,
+                account,
+                password
+              }
+            }`
+        }),
+        credentials: 'include'
+      })
       .then(res => res.json())
       .then(json => {
         if (json.errors) throw new Error(json.errors);
         return json.data.accounts;
       })
+      .catch(err => console.log(err.stack));
     }
   }
 ])
