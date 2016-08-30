@@ -1,6 +1,6 @@
 const Promise = require('bluebird');
 const bcrypt = Promise.promisifyAll(require('bcrypt'));
-const { Users } = require('../db');
+const { User } = require('../db');
 
 function flashError(req, res, err) {
   const isDev = req.app.get('env') === 'development';
@@ -9,7 +9,7 @@ function flashError(req, res, err) {
 }
 
 function canLogin(username, password) {
-  return new Users({ username: username })
+  return new User({ username: username })
     .fetch()
     .then(function(user) {
       if (!user) {
@@ -49,7 +49,7 @@ function logout(req, res, next) {
 }
 
 function canCreate(username, password, passwordAgain) {
-  return new Users({ username: username })
+  return new User({ username: username })
     .fetch()
     .then(function(user) {
       if (user) {
@@ -60,7 +60,7 @@ function canCreate(username, password, passwordAgain) {
         throw new Error('Passwords are not the same.');
       }
 
-      return new Users()
+      return new User()
         .save({
           username: username,
           password: password

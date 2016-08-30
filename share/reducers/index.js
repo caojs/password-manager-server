@@ -11,7 +11,7 @@ export default (state, action) => {
   switch (type) {
     case ADD_ACCOUNT_LIST:
       if (error) { return state; }
-      const account = payload.account;
+      const account = payload.upsertAccount;
       return state.updateIn(
         ['reduxAsyncConnect', 'accounts'],
         l => l.push(Immutable.Map(account))

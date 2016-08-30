@@ -1,7 +1,7 @@
-const { Users } = require('../db');
+const { User } = require('../db');
 
 function exportUser(userId, req, res) {
-  return new Users({ id: userId })
+  return new User({ id: userId })
     .fetch()
     .then(user => {
       if (user) {

@@ -18,7 +18,8 @@
     ],
     "only": [
       "client",
-      "share"
+      "share",
+      "server"
     ],
     "env": {
       "production": {
@@ -59,7 +60,8 @@
     "redux-promise": "0.5.3",
     "serve-favicon": "~2.3.0",
     "sqlite3": "3.1.4",
-    "util-arity": "1.0.2"
+    "util-arity": "1.0.2",
+    "validator": "5.5.0"
   },
   "devDependencies": {
     "babel-core": "6.13.2",

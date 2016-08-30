@@ -1,7 +1,7 @@
 const bookshelf = require('../bookshelf');
 require('./users');
 
-const Accounts = bookshelf.Model.extend({
+const Account = bookshelf.Model.extend({
   tableName: 'accounts',
 
   hasTimestamps: true,
@@ -11,4 +11,9 @@ const Accounts = bookshelf.Model.extend({
   }
 });
 
-module.exports = bookshelf.model('Accounts', Accounts);
+const Accounts = bookshelf.Collection.extend({
+  model: Account
+});
+
+exports.Account = bookshelf.model('Account', Account);
+exports.Accounts = Accounts;

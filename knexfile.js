@@ -8,6 +8,10 @@ module.exports = {
     },
     migrations: {
       directory: './server/db/migrations'
+    },
+    pool: {
+      min: 0,
+      max: 7
     }
   }
 

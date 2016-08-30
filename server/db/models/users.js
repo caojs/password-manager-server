@@ -3,7 +3,7 @@ const bcrypt = Promise.promisifyAll(require('bcrypt'));
 const bookshelf = require('../bookshelf');
 require('./accounts');
 
-const Users = bookshelf.Model.extend({
+const User = bookshelf.Model.extend({
   tableName: 'users',
 
   hasTimestamps: true,
@@ -24,8 +24,13 @@ const Users = bookshelf.Model.extend({
   },
 
   accounts: function() {
-    this.hasMany('Accounts');
+    this.hasMany('Account');
   }
 });
 
-module.exports = bookshelf.model('Users', Users);
+const Users = bookshelf.Collection.extend({
+  model: User
+});
+
+exports.User = bookshelf.model('User', User);
+exports.Users = Users;
