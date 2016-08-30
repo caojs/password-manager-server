@@ -1,3 +1,6 @@
+require('babel-register');
+require('isomorphic-fetch');
+
 const express = require('express');
 const path = require('path');
 const favicon = require('serve-favicon');
@@ -11,10 +14,6 @@ const cookie = require('cookie');
 const schema = require('./db/graphql/schema');
 
 const app = express();
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
