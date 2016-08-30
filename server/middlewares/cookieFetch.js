@@ -1,4 +1,3 @@
-const cookie = require('cookie');
 const realFetch = fetch;
 
 function cookieFetch(fetch, cookie) {

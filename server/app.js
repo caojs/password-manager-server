@@ -9,7 +9,6 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const bodyParser = require('body-parser');
 const graphqlHTTP = require('express-graphql');
-const cookie = require('cookie');
 
 const schema = require('./db/graphql/schema');
 
