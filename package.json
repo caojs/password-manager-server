@@ -16,11 +16,6 @@
       "react",
       "stage-2"
     ],
-    "only": [
-      "client",
-      "share",
-      "server"
-    ],
     "env": {
       "production": {
         "plugins": [
@@ -48,7 +43,6 @@
     "knex": "0.11.9",
     "lodash": "4.15.0",
     "morgan": "~1.7.0",
-    "pug": "2.0.0-beta5",
     "react": "15.3.0",
     "react-dom": "15.3.0",
     "react-redux": "4.4.5",
@@ -83,9 +77,8 @@
     "image-webpack-loader": "2.0.0",
     "json-loader": "0.5.4",
     "postcss-cssnext": "2.7.0",
+    "postcss-loader": "0.11.1",
     "postcss-reporter": "1.4.1",
-    "pug-loader": "2.2.1",
-    "react": "15.3.0",
     "redux-devtools": "3.3.1",
     "redux-devtools-dock-monitor": "1.1.1",
     "redux-devtools-log-monitor": "1.0.11",

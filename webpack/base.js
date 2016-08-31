@@ -43,18 +43,16 @@ module.exports = (options) => ({
       loader: 'url?limit=10000',
     }],
   },
-  plugins: options.plugins.concat([
-    // new webpack.ProvidePlugin({
-    //   fetch: 'exports?self.fetch!whatwg-fetch',
-    // }),
 
+  plugins: options.plugins.concat([
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-      },
-    }),
+        IS_BROWSER: JSON.stringify(true)
+      }
+    })
   ]),
-  // postcss: () => options.postcssPlugins,
+
   devtool: options.devtool,
   target: 'web', // Make web variables accessible to webpack, e.g. window
   stats: false, // Don't show stats in the console
