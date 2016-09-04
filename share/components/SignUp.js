@@ -1,11 +1,25 @@
 import React from 'react';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { Field, reduxForm } from 'redux-form/immutable';
 import Immutable from 'immutable';
 
-const SignUp = ({ error }) => (
-  <form method="post" action="/signup">
+import { signup } from '../actionCreators';
 
-    {error.size ?
+const enhance = compose(
+  connect(state => ({
+    error: state.getIn(['flash', 'error'], Immutable.List())
+  })),
+  reduxForm({
+    form: 'signup',
+    onSubmit: (form, dispatch) => dispatch(signup(form.toJS()))
+  })
+);
+
+const SignUp = enhance(({ error, handleSubmit }) => (
+  <form onSubmit={handleSubmit}>
+
+    {error && error.size ?
       <ul>
         {error.map((message, index) => (
           <li key={index}>{message}</li>
@@ -15,22 +29,18 @@ const SignUp = ({ error }) => (
 
     <label>
       Username:
-      <input name="username"/>
+      <Field name="username" component="input" type="text"/>
     </label>
     <label>
       Password:
-      <input type="password" name="password"/>
+      <Field name="password" component="input" type="password"/>
     </label>
     <label>
       Password Again:
-      <input type="password" name="passwordAgain"/>
+      <Field name="passwordAgain" component="input" type="password"/>
     </label>
     <button type="submit">Sign Up</button>
   </form>
-)
+));
 
-export default connect(
-  (state) => ({
-    error: state.getIn(['flash', 'error'], Immutable.List())
-  })
-)(SignUp);
+export default SignUp;

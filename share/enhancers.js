@@ -1,10 +1,8 @@
 import { compose, applyMiddleware } from 'redux';
 import reduxPromise from 'redux-promise';
 
-import graphqlware from './middlewares/graphqlware';
-
 let enhancers = [
-  applyMiddleware(graphqlware, reduxPromise)
+  applyMiddleware(reduxPromise)
 ];
 
 if (process.env.NODE_ENV === 'development') {

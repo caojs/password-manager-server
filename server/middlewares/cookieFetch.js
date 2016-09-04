@@ -1,6 +1,6 @@
 const realFetch = fetch;
 
-function cookieFetch(fetch, cookie) {
+function tokenFetch(fetch, cookie ) {
   return (url, opts) => {
     opts = opts || {};
     return fetch(url, Object.assign(opts, {
@@ -12,7 +12,7 @@ function cookieFetch(fetch, cookie) {
 function middleware(req, res, next) {
   const kuki = req.headers.cookie;
   global.fetch = kuki ?
-    cookieFetch(realFetch, kuki) :
+    tokenFetch(realFetch, kuki) :
     realFetch;
   next();
 }

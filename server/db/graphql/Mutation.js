@@ -58,6 +58,33 @@ function deleteAccount(model, user) {
 const Mutation = new GraphQLObjectType({
   name: 'Mutation',
   fields: {
+    createUser: {
+      type: UserType,
+      args: {
+        username: { type: new GraphQLNonNull(GraphQLString) },
+        password: { type: new GraphQLNonNull(GraphQLString) },
+        passwordAgain: { type: new GraphQLNonNull(GraphQLString) }
+      },
+      resolve: (source, { username, password, passwordAgain }, { user }) => {
+        return new User({ username: username })
+          .fetch()
+          .then(function(user) {
+            if (user)
+              throw new Error('User already exist');
+
+            if (password !== passwordAgain)
+              throw new Error('Passwords are not the same.');
+
+            return new User()
+              .save({
+                username: username,
+                password: password
+              })
+              .then(user => user.toJSON());
+          });
+      }
+    },
+
     deleteAccount: {
       type: AccountType,
       description: 'Delete an account.',
@@ -68,7 +95,7 @@ const Mutation = new GraphQLObjectType({
         return deleteAccount(new Account({ id }), user);
       }
     },
-    
+
     deleteAccounts: {
       type: new GraphQLList(AccountType),
       description: 'Delete a list of account.',

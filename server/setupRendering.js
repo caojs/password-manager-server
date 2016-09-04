@@ -19,9 +19,12 @@ function interpolateHtml(html, appHTML, state) {
 function sendHtml(html, req, res, next) {
   const store = createStore({
     user: req.user,
-    flash: req.flash()
   });
   const routes = getRoutes(store);
+
+  if (process.env.DISABLE_SSR) {
+    return res.send(interpolateHtml(html, '', {}));
+  }
 
   match({
     routes,

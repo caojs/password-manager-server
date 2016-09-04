@@ -1,8 +1,8 @@
 require('babel-register');
 require('isomorphic-fetch');
 
-const express = require('express');
 const path = require('path');
+const express = require('express');
 const favicon = require('serve-favicon');
 const logger = require('morgan');
 const session = require('express-session');
@@ -10,29 +10,39 @@ const flash = require('connect-flash');
 const bodyParser = require('body-parser');
 const graphqlHTTP = require('express-graphql');
 
+const config = require('./config');
 const schema = require('./db/graphql/schema');
+const passport = require('./passport');
+const { login, logout, signup, cookieFetch } = require('./middlewares');
+
 const app = express();
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(session({ secret: 'oppa', resave: false, saveUninitialized: false }));
-app.use(flash());
-app.use(require('./middlewares/serializeUser'));
-app.use(require('./middlewares/cookieFetch'));
+app.use(session(config.session));
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Authentication
+// -----------------------------------------------------------------------------
+app.post('/signup', signup);
+app.post('/login', login);
+app.get('/logout', logout);
+
+// Include cookies to fetch api.
+// -----------------------------------------------------------------------------
+app.use(cookieFetch);
 
 // Graphql
+// -----------------------------------------------------------------------------
 app.use('/graphql', graphqlHTTP(req => ({
   schema: schema,
   graphiql: true,
   context: {
-    user: req.user,
-    session: req.session
+    user: req.user
   }
 })));
-
-// Authentication
-app.use(require('./routes/auth'));
 
 // static middleware and webpack
 require('./setupRendering')(app);
@@ -44,9 +54,18 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-// error handlers
 
-//TODO: need consider
+// error handlers
+if (app.get('env') === 'development') {
+  const PrettyError = require('pretty-error');
+  const pe = new PrettyError();
+
+  app.use(function(err, req, res, next) {
+    console.log(pe.render(new Error('Some error message')));
+    next(err);
+  });
+}
+
 app.use(require('errorhandler')());
 
 module.exports = app;
