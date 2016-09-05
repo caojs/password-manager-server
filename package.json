@@ -8,7 +8,7 @@
     "start": "npm run dev:server",
     "start:ssr": "npm run dev:server-ssr",
     "stop": "pm2 delete ./pm2/process.json",
-    "live:build": "cross-env NODE_ENV=production webpack --config ./webpack/prod.js",
+    "live:build": "cross-env NODE_ENV=production webpack --config ./webpack/prod.js --display-modules",
     "live:server": "cross-env NODE_ENV=production node index.js",
     "go": "npm run live:build && npm run live:server"
   },

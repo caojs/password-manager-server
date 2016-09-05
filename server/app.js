@@ -45,7 +45,7 @@ app.use('/graphql', graphqlHTTP(req => ({
 })));
 
 // static middleware and webpack
-require('./setupRendering')(app);
+require('./severRendering')(app);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
