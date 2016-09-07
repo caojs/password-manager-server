@@ -1,15 +1,38 @@
-const MUTATION = 'APP::MUTATION';
-const QUERY = 'APP::QUERY'
+import isPlainObject from 'lodash/isPlainObject';
 
-const prefix = pre => type => {
-  return pre + '::' + type;
-};
+function prefix(pre) {
+  return type => pre + '::' + type;
+}
 
-const app = prefix('APP::');
-const fetch = prefix('APP::FETCH');
-const mutation = prefix('APP::MUTATION');
-const query = prefix('APP::QUERY');
+function trap(o) {
+  if (process.env.NODE_ENV === 'development' && Proxy) {
+    return new Proxy(o, {
+      get: function(target, name) {
+        if (target[name]) return target[name];
+        if (typeof name === 'string')
+          throw new Error(`action type ${name} doesn't exist.`);
+      }
+    });
+  }
+  else return o;
+}
 
-export const SIGNUP = fetch('SIGNUP');
-export const LOGIN = fetch('LOGIN');
-export const ADD_ACCOUNT_LIST = mutation('ADD_ACCOUNT_LIST');
+function mirror(actions) {
+  const o = {};
+  const app = prefix('APP');
+  return actions
+    .reduce((m, name) => {
+      m[name] = app(name);
+      return m;
+    }, Object.create(null));
+}
+
+const constants = trap(mirror([
+  'ACTION_FROM_SERVER',
+  'SIGNUP',
+  'LOGIN',
+  'ADD_ACCOUNT_LIST',
+]));
+
+// Because of some magic ,using CommonJS here.
+module.exports = constants;

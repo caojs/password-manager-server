@@ -21,8 +21,9 @@ module.exports = require('./base')({
   },
 
   cssLoaders: ExtractTextPlugin.extract(
-    'style-loader',
-    'css-loader?modules&-autoprefixer&importLoaders=1!postcss-loader'
+    'style',
+    'css?modules&-autoprefixer&importLoaders=1',
+    'postcss'
   ),
 
   postcssPlugins: [
@@ -50,9 +51,6 @@ module.exports = require('./base')({
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         warnings: false,
-      },
-      mangle: {
-        except: ['fetch']
       }
     }),
 

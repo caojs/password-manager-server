@@ -12,7 +12,7 @@ import Sidebar from './components/Sidebar';
 import AccountForm from './components/AccountForm';
 import AccountInfo from './components/AccountInfo';
 
-export default (store) => {
+export default function routes(store) {
   const storeContext = hookContext(store);
 
   return (

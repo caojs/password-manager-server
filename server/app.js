@@ -11,6 +11,7 @@ const bodyParser = require('body-parser');
 const graphqlHTTP = require('express-graphql');
 
 const config = require('./config');
+const wpConfig = require('../webpack/defaults');
 const schema = require('./db/graphql/schema');
 const passport = require('./passport');
 const { login, logout, signup, cookieFetch } = require('./middlewares');
@@ -18,6 +19,7 @@ const { login, logout, signup, cookieFetch } = require('./middlewares');
 const app = express();
 
 app.use(logger('dev'));
+app.use(wpConfig.publicPath, express.static(wpConfig.outputPath));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session(config.session));

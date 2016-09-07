@@ -1,5 +1,4 @@
 import React from 'react';
-import { compose, withState, mapProps } from 'recompose';
 
 const randomPassword = (length) => {
   let chars = "abcdefghijklmnopqrstuvwxyz!@#$%^&*()-+<>ABCDEFGHIJKLMNOP1234567890";
@@ -11,23 +10,37 @@ const randomPassword = (length) => {
   return pass;
 };
 
-const enhance = compose(
-  withState('pass', 'randomPass', ''),
-  mapProps(({ pass, randomPass, onCopy }) => ({
-    pass,
-    onCopy: () => onCopy(pass),
-    randomPass: () => randomPass(randomPassword(10))
-  }))
-);
+class PasswordGenerator extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+    this.randomPassword = this.randomPassword.bind(this);
+    this.onCopy = this.onCopy.bind(this);
+  }
 
-const PasswordGenerator = enhance(
-  ({ pass, randomPass, onCopy }) => (
-    <div>
-      <span>{pass}</span>
-      <button onClick={randomPass}>Generate</button>
-      <button onClick={onCopy}>Copy</button>
-    </div>
-  )
-)
+  render() {
+    const { pass } = this.state;
+
+    return (
+      <div>
+        <span>{pass}</span>
+        <button onClick={this.randomPassword}>Generate</button>
+        <button onClick={this.onCopy}>Copy</button>
+      </div>
+    )
+  }
+
+  randomPassword() {
+    return this.setState({ pass: randomPassword(15) });
+  }
+
+  onCopy() {
+    return this.props.onCopy(this.state.pass);
+  }
+}
+
+PasswordGenerator.propTypes = {
+  onCopy: React.PropTypes.func.isRequired
+};
 
 export default PasswordGenerator;

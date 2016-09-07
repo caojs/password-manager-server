@@ -10,7 +10,9 @@ function interpolateHtml(html, appHTML, state) {
 
 function sendHTMLify(disableSSR) {
   if (disableSSR) {
-    return (html, req, res) => res.send(interpolateHtml(html, '', {}));
+    return (html, req, res) => res.send(interpolateHtml(html, '', {
+      user: req.user
+    }));
   }
   else {
     const { createElement } = require('react');
@@ -71,7 +73,6 @@ function setupProdMiddleware(app, config) {
   const html = fs.readFileSync(join(outputPath, 'index.html')).toString();
   const sendHTML = sendHTMLify(process.env.DISABLE_SSR);
 
-  app.use(publicPath, express.static(outputPath));
   app.get('*', (req, res, next) => sendHTML(html, req, res, next));
 }
 
@@ -79,9 +80,9 @@ function setupDevMiddleware(app, config) {
   const compiler = require('webpack')(config);
   const devMiddleware = require('webpack-dev-middleware')(compiler, {
     publicPath: config.output.publicPath,
-    // noInfo: true,
-    // silent: true,
-    // stats: 'errors-only'
+    noInfo: true,
+    silent: true,
+    stats: 'errors-only'
   });
   const sendHTML = sendHTMLify(process.env.DISABLE_SSR);
 

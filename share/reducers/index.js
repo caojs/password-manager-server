@@ -1,7 +1,20 @@
-import Immutable from 'immutable';
-import { ADD_ACCOUNT_LIST } from '../actionCreators/constants';
+import Immutable, { fromJS } from 'immutable';
+import { reducer as formReducer } from 'redux-form/immutable';
+import {
+  setToImmutableStateFunc,
+  setToMutableStateFunc,
+  immutableReducer as reduxAsyncConnect
+} from 'redux-connect';
 
-export default (state, action) => {
+setToImmutableStateFunc((mutableState) => fromJS(mutableState));
+setToMutableStateFunc((immutableState) => immutableState.toJS());
+
+const {
+  LOGIN,
+  ADD_ACCOUNT_LIST
+} = require('../actionCreators/constants');
+
+function reducers(state, action) {
   const {
     type,
     payload,
@@ -9,15 +22,44 @@ export default (state, action) => {
   } = action;
 
   switch (type) {
-    case ADD_ACCOUNT_LIST:
-      if (error) { return state; }
-      const account = payload.upsertAccount;
-      return state.updateIn(
+    case LOGIN:
+      const {
+        data: { user } = {},
+        errors
+      } = payload;
+
+      if (errors) { console.log(errors); return state; }
+      return state.set('user', fromJS(user));
+
+    case ADD_ACCOUNT_LIST: {
+      const {
+        data: { upsertAccount } = {},
+        errors
+      } = payload;
+
+      if (errors) { return state; }
+      state = state.updateIn(
         ['reduxAsyncConnect', 'accounts'],
-        l => l.push(Immutable.Map(account))
+        l => l.push(Immutable.Map(upsertAccount))
       );
+
+      console.log(state.toJS())
+      return state;
+    }
 
     default:
       return state;
   }
-};
+}
+
+function enhanceReducers(reducers) {
+  return (state, action) => {
+    const reduxConnectState = state.get('reduxAsyncConnect');
+    const reduxForm = state.get('form');
+    state = state.set('reduxAsyncConnect', reduxAsyncConnect(reduxConnectState, action));
+    state = state.set('form', formReducer(reduxForm, action));
+    return reducers(state, action);
+  };
+}
+
+export default enhanceReducers(reducers);

@@ -1,4 +1,6 @@
 const { User } = require('../db');
+const { fromServer: actionFromServer } = require('../../share/actionCreators');
+const { LOGIN, SIGNUP } = require('../../share/actionCreators/constants');
 
 function canCreate(username, password, passwordAgain) {
   return new User({ username })
@@ -15,7 +17,7 @@ function canCreate(username, password, passwordAgain) {
           username: username,
           password: password
         })
-        .then(user => ({ user: user }));
+        .then(user => ({ user: user.toJSON() }));
     });
 }
 
@@ -27,17 +29,21 @@ function signup(req, res, next) {
   } = req.body;
 
   return canCreate(username, password, passwordAgain)
-    .then(({ info, user }) => {
+    .then(({ info: message, user }) => {
 
       if (!user) {
-        return res.json({
-          errors: [{ message: info }]
-        });
+        return res.json(actionFromServer(
+          { errors: [{ message }] },
+          { type: SIGNUP }
+        ));
       }
 
-      req.login(user.toJSON(), (err) => {
+      req.login(user, (err) => {
         if (err) return next(err);
-        res.json({ redirect: '/' });
+        res.json(actionFromServer(
+          { data: { user } },
+          { type: LOGIN }
+        ));
       });
     })
     .catch(err => next(err));

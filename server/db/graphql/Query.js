@@ -29,7 +29,8 @@ const Query = new GraphQLObjectType({
         if (!user)
           throw new Error(`Don't have permissions.`);
 
-        return new Account({ user_id: user.id })
+        return new Account()
+          .query('where', 'user_id', '=', user.id)
           .fetchAll()
           .then(accounts => accounts.toJSON());
       }
