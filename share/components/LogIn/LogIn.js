@@ -1,36 +1,34 @@
 import React from 'react';
 import { Field } from 'redux-form/immutable';
+import { injectProps } from '../../helpers/decorators';
 
-function LogIn({ error, handleSubmit }) {
-  return (
-    <form onSubmit={handleSubmit}>
+export default class LogIn extends React.Component {
 
-      {error && error.size ?
-        <ul>
-          {error.map((message, index) => (
-            <li key={index}>{message}</li>
-          ))}
-        </ul> :
-        null}
+  @injectProps
+  render({ error, handleSubmit }) {
+    return (
+      <form onSubmit={handleSubmit}>
 
-      <label>
-        Username:
-        <Field
-          name="username"
-          component="input"/>
-      </label>
+        {error && error.size ?
+          <ul>
+            {error.map((message, index) => (
+              <li key={index}>{message}</li>
+            ))}
+          </ul> :
+          null}
 
-      <label>
-        Password:
-        <Field
-          name="password"
-          component="input"
-          type="password"/>
-      </label>
+        <label>
+          Username:
+          <Field name="username" component="input"/>
+        </label>
 
-      <button type="submit">Sign In</button>
-    </form>
-  );
+        <label>
+          Password:
+          <Field name="password" component="input" type="password"/>
+        </label>
+
+        <button type="submit">Sign In</button>
+      </form>
+    );
+  }
 }
-
-export default LogIn;

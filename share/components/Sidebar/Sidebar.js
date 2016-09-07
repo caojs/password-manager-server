@@ -1,25 +1,30 @@
 import React from 'react';
+import { injectProps } from '../../helpers/decorators';
 
-function Sidebar({ username, accounts }) {
-  return (
-    <div>
+class Sidebar extends React.Component {
+
+  @injectProps
+  render({ username, accounts }) {
+    return (
       <div>
-        <span>{username}</span>
-        <a href="/logout">Log out</a>
-      </div>
+        <div>
+          <span>{username}</span>
+          <a href="/logout">Log out</a>
+        </div>
 
-      <ul>
-        {accounts && accounts.map(a => {
-          return (
-            <li key={a.id}>
-            <span>{a.title}</span>
-            <span>{a.account}</span>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
-  );
+        <ul>
+          {accounts && accounts.map(a => {
+            return (
+              <li key={a.id}>
+              <span>{a.title}</span>
+              <span>{a.account}</span>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    );
+  }
 }
 
 export default Sidebar;
