@@ -13,9 +13,17 @@ function mapToArgs(m) {
     .join(',');
 }
 
-function objectToArgs(o) {
+function objectToArgs(o, inArray) {
   return Object.keys(o)
-    .filter(k => o[k] !== undefined)
+    .filter(k => {
+      const isIn = inArray ?
+        !~inArray.indexOf(k) :
+        true;
+
+      return isIn &&
+        o[k] !== undefined &&
+        o[k] !== null;
+    })
     .map(k => k + ':' + typeStringify(o[k]))
     .join(',');
 }

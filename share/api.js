@@ -7,7 +7,13 @@ export const post = (url, data) => {
     },
     credentials: 'include'
   })
-  .then(res => res.json());
+  .then(res => res.json())
+  .catch(err => {
+    if (process.env.NODE_ENV === 'development') {
+      console.warn(err.stack);
+    }
+    errors: [{ message: err.message }]
+  });
 };
 
 export const graphPost = (query) => {

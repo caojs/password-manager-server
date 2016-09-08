@@ -27,7 +27,7 @@ export default class AccountForm extends React.Component {
             Info:
             <Field name="info" component="textarea"/>
           </label>
-          <button type="submit">Create</button>
+          <button type="submit">Submit</button>
         </form>
       </div>
     );

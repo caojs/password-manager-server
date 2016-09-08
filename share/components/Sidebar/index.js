@@ -19,8 +19,12 @@ import { graphPost } from '../../api';
           }
         }`
       )
-      .then(json => (json.data || {}).accounts)
-      .catch(err => console.log(err.stack));
+      .then(json => {
+        const { data, errors } = json;
+        return data ?
+          { data: data.accounts } :
+          { errors };
+      });
     }
   }
 ])

@@ -1,5 +1,7 @@
 const {
+  GraphQLID,
   GraphQLObjectType,
+  GraphQLNonNull,
   GraphQLList
 } = require('graphql');
 
@@ -20,6 +22,29 @@ const Query = new GraphQLObjectType({
         return new User({ id: user.id })
           .fetch()
           .then(user => user && user.toJSON());
+      }
+    },
+
+    account: {
+      type: AccountType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLID) }
+      },
+      resolve: (source, { id }, { user }) => {
+        if (!user)
+          throw new Error(`Don't have permissions.`);
+
+        return new Account({ id })
+          .fetch()
+          .then(account => {
+            if (!account)
+              throw new Error(`Account with id ${id} doesn't exist.`);
+
+            if (account.get('user_id') !== user.id)
+              throw new Error(`Don't have permissions.`);
+
+            return account.toJSON();
+          });
       }
     },
 

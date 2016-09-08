@@ -5,6 +5,11 @@ class Sidebar extends React.Component {
 
   @injectProps
   render({ username, accounts }) {
+    const {
+      data,
+      errors
+    } = accounts;
+
     return (
       <div>
         <div>
@@ -13,14 +18,18 @@ class Sidebar extends React.Component {
         </div>
 
         <ul>
-          {accounts && accounts.map(a => {
-            return (
-              <li key={a.id}>
+          {errors && errors.map((e, i) => (
+            <li key={i}>{e.message}</li>
+          ))}
+        </ul>
+
+        <ul>
+          {data && data.map(a => (
+            <li key={a.id}>
               <span>{a.title}</span>
               <span>{a.account}</span>
-              </li>
-            );
-          })}
+            </li>
+          ))}
         </ul>
       </div>
     );

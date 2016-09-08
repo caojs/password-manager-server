@@ -11,7 +11,8 @@ setToMutableStateFunc((immutableState) => immutableState.toJS());
 
 const {
   LOGIN,
-  ADD_ACCOUNT_LIST
+  ADD_ACCOUNT,
+  UPDATE_ACCOUNT
 } = require('../actionCreators/constants');
 
 function reducers(state, action) {
@@ -31,21 +32,47 @@ function reducers(state, action) {
       if (errors) { console.log(errors); return state; }
       return state.set('user', fromJS(user));
 
-    case ADD_ACCOUNT_LIST: {
+    case ADD_ACCOUNT: {
       const {
         data: { upsertAccount } = {},
         errors
       } = payload;
 
-      if (errors) { return state; }
       state = state.updateIn(
         ['reduxAsyncConnect', 'accounts'],
-        l => l.push(Immutable.Map(upsertAccount))
+        l => {
+          if (errors) l = l.set('errors', errors);
+          if (upsertAccount) l = l.update('data', data => data.push(upsertAccount));
+          return l;
+        }
       );
 
-      console.log(state.toJS())
       return state;
     }
+
+    case UPDATE_ACCOUNT: {
+      const {
+        data: { upsertAccount } = {},
+        errors
+      } = payload;
+
+      state = state.updateIn(
+        ['reduxAsyncConnect', 'accounts'],
+        l => {
+          if (errors) l = l.set('errors', errors);
+          if (upsertAccount) {
+            const index = l
+              .get('data', [])
+              .findIndex(a => a.get('id') === upsertAccount.id);
+            l = l.setIn(['data', index], upsertAccount);
+          }
+          return l;
+        }
+      );
+
+      return state;
+    }
+
 
     default:
       return state;
