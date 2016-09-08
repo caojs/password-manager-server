@@ -5,15 +5,17 @@ import { reduxForm } from 'redux-form/immutable'
 import Immutable from 'immutable';
 
 import LogIn from './LogIn';
+import redirectTo from '../redirectTo';
 import { post } from '../../api';
 
+@connect(state => ({
+  user: state.get('user')
+}))
+@redirectTo('/', ({ user }) => user && user.size)
 @reduxForm({
   form: 'login',
   onSubmit: (form, dispatch) => post('/login', form.toJS()).then(dispatch)
 })
-@connect(state => ({
-  error: state.getIn(['flash', 'error'], Immutable.List())
-}))
 class LogInContainer extends LogIn {}
 
 LogInContainer.onEnter = (nextState, replace, { getState }) => {
