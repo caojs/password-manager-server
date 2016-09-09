@@ -11,7 +11,7 @@ import { graphPost } from '../../api';
 
 @asyncConnect([
   {
-    key: 'accountForm',
+    key: 'accountData',
     promise: ({ params }) => {
       const { id } = params || {};
 
@@ -29,17 +29,23 @@ import { graphPost } from '../../api';
         }
       `)
       .then(json => {
-        const { data, errors } = json;
-        return data ?
-          { data: data.account } :
-          { errors };
+        const {
+          data,
+          errors
+        } = json;
+        if (data) json.data = data.account;
+        return json;
       });
     }
   }
 ])
-@connect(state => ({
-  initialValues: state.getIn(['reduxAsyncConnect', 'accountForm', 'data'], Immutable.Map())
-}))
+@connect(state => {
+  const res = state.getIn(['reduxAsyncConnect', 'accountData']) || Immutable.Map();
+  return {
+    errors: res.get('errors'),
+    initialValues: res.get('data', Immutable.Map())
+  }
+})
 @reduxForm({
   form: 'accountForm',
   onSubmit: (form, dispatch, props) => {

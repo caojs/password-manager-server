@@ -35,8 +35,8 @@ export default function routes(store) {
           path='edit/:id'
           components={{ sidebar: Sidebar, main: AccountForm }}/>
         <Route
-          path=':id'
-          components={{ sidebar: Sidebar, main: AccountForm }}/>
+          path='account/:id'
+          components={{ sidebar: Sidebar, main: AccountInfo }}/>
       </Route>
       <Redirect from='*' to='/404'/>
     </Route>
