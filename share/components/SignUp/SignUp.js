@@ -2,38 +2,48 @@ import React from 'react';
 import { Field } from 'redux-form/immutable';
 import { injectProps } from '../../helpers/decorators';
 
+function Form({ handleSubmit }) {
+  return (
+    <form onSubmit={handleSubmit}>
+      <label>
+        Username:
+        <Field name="username" component="input" type="text"/>
+      </label>
+
+      <label>
+        Password:
+        <Field name="password" component="input" type="password"/>
+      </label>
+
+      <label>
+        Password Again:
+        <Field name="passwordAgain" component="input" type="password"/>
+      </label>
+
+      <button type="submit">Sign Up</button>
+    </form>
+  )
+}
+
 export default class SignUp extends React.Component {
 
   @injectProps
-  render({ error, handleSubmit }) {
+  render({ errors, handleSubmit }) {
+
+    let errorMessages = (errors && errors.size) ? (
+        <ul>
+          {errors.map((e, index) => (
+            <li key={index}>{e.get('message')}</li>
+          ))}
+        </ul>) :
+        null;
+
     return (
-      <form onSubmit={handleSubmit}>
-
-        {error && error.size ?
-          <ul>
-            {error.map((message, index) => (
-              <li key={index}>{message}</li>
-            ))}
-          </ul> :
-          null}
-
-        <label>
-          Username:
-          <Field name="username" component="input" type="text"/>
-        </label>
-
-        <label>
-          Password:
-          <Field name="password" component="input" type="password"/>
-        </label>
-
-        <label>
-          Password Again:
-          <Field name="passwordAgain" component="input" type="password"/>
-        </label>
-
-        <button type="submit">Sign Up</button>
-      </form>
+      <div>
+        {errorMessages}
+        <Form handleSubmit={handleSubmit} />
+      </div>
     );
   }
+
 }

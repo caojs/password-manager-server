@@ -8,10 +8,14 @@ import LogIn from './LogIn';
 import redirectTo from '../redirectTo';
 import { post } from '../../api';
 
-@connect(state => ({
-  user: state.get('user')
-}))
-@redirectTo('/', ({ user }) => user && user.size)
+@connect(state => {
+  const user = state.get('user') || Immutable.Map();
+  return {
+    userData: user.get('data'),
+    errors: user.get('errors')
+  };
+})
+@redirectTo('/', ({ userData }) => userData && userData.size)
 @reduxForm({
   form: 'login',
   onSubmit: (form, dispatch) => post('/login', form.toJS()).then(dispatch)
@@ -19,8 +23,8 @@ import { post } from '../../api';
 class LogInContainer extends LogIn {}
 
 LogInContainer.onEnter = (nextState, replace, { getState }) => {
-  const user = getState().get('user');
-  if (user) {
+  const user = getState().getIn(['user', 'data']);
+  if (user && user.size) {
     replace('/');
   }
 };

@@ -8,8 +8,8 @@ const Dashboard = ({ sidebar, main }) => (
 );
 
 Dashboard.onEnter = (nextState, replace, { getState }) => {
-  const user = getState().get('user');
-  if (!user) {
+  const user = getState().getIn(['user', 'data']);
+  if (!user || !user.size) {
     replace('/login');
   }
 };

@@ -41,7 +41,6 @@ import { graphPost } from '../../api';
   const data = state.getIn(['reduxAsyncConnect', 'accountData']) ||
     Immutable.Map();
 
-  console.log(data.toObject());
   return {
     ...data.toObject()
   };

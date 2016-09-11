@@ -6,10 +6,14 @@ import redirectTo from '../redirectTo';
 import SignUp from './SignUp';
 import { post } from '../../api';
 
-@connect(state => ({
-  user: state.get('user')
-}))
-@redirectTo('/', ({ user }) => user && user.size)
+@connect(state => {
+  const user = state.get('user') || Immutable.Map();
+  return {
+    userData: user.get('data'),
+    errors: user.get('errors')
+  };
+})
+@redirectTo('/', ({ userData }) => userData && userData.size)
 @reduxForm({
   form: 'signup',
   onSubmit: (form, dispatch) => post('/signup', form.toJS()).then(dispatch)

@@ -11,6 +11,7 @@ setToMutableStateFunc((immutableState) => immutableState.toJS());
 
 const {
   LOGIN,
+  SIGNUP,
   ADD_ACCOUNT,
   UPDATE_ACCOUNT
 } = require('../actionCreators/constants');
@@ -24,13 +25,13 @@ function reducers(state, action) {
 
   switch (type) {
     case LOGIN:
+    case SIGNUP:
       const {
         data: { user } = {},
         errors
       } = payload;
-
-      if (errors) { console.log(errors); return state; }
-      return state.set('user', fromJS(user));
+      if (user) payload.data = user;
+      return state.set('user', fromJS(payload));
 
     case ADD_ACCOUNT: {
       const {

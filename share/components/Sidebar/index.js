@@ -21,16 +21,16 @@ import { graphPost } from '../../api';
       )
       .then(json => {
         const { data, errors } = json;
-        return data ?
-          { data: data.accounts } :
-          { errors };
+        return errors ?
+          { errors } :
+          { data: data.accounts };
       });
     }
   }
 ])
 @connect(
   state => ({
-    username: state.getIn(['user', 'username'])
+    username: state.getIn(['user', 'data', 'username'])
   })
 )
 export default class SidebarContainer extends Sidebar {}
