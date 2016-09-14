@@ -11,7 +11,7 @@ function interpolateHtml(html, appHTML, state) {
 function sendHTMLify(disableSSR) {
   if (disableSSR) {
     return (html, req, res) => res.send(interpolateHtml(html, '', {
-      user: req.user
+      user: { data: req.user }
     }));
   }
   else {
@@ -26,7 +26,7 @@ function sendHTMLify(disableSSR) {
 
     return (html, req, res, next) => {
 
-      const store = createStore({ user: req.user });
+      const store = createStore({ user: { data: req.user }});
       const routes = getRoutes(store);
 
       match({

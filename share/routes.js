@@ -9,7 +9,7 @@ import SignUp from './components/SignUp';
 import NotFound from './components/NotFound';
 import Dashboard from './components/Dashboard';
 import Sidebar from './components/Sidebar';
-import AccountForm from './components/AccountForm';
+import { UpdateForm, AddForm } from './components/AccountForm';
 import AccountInfo from './components/AccountInfo';
 
 export default function routes(store) {
@@ -30,10 +30,10 @@ export default function routes(store) {
         component={Dashboard}
         onEnter={storeContext(Dashboard.onEnter)}>
         <IndexRoute
-          components={{ sidebar: Sidebar, main: AccountForm }}/>
+          components={{ sidebar: Sidebar, main: AddForm }}/>
         <Route
           path='edit/:id'
-          components={{ sidebar: Sidebar, main: AccountForm }}/>
+          components={{ sidebar: Sidebar, main: UpdateForm }}/>
         <Route
           path='account/:id'
           components={{ sidebar: Sidebar, main: AccountInfo }}/>

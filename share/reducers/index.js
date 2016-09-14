@@ -13,7 +13,8 @@ const {
   LOGIN,
   SIGNUP,
   ADD_ACCOUNT,
-  UPDATE_ACCOUNT
+  UPDATE_ACCOUNT,
+  DELETE_ACCOUNTS
 } = require('../actionCreators/constants');
 
 function reducers(state, action) {
@@ -42,8 +43,8 @@ function reducers(state, action) {
       state = state.updateIn(
         ['reduxAsyncConnect', 'accounts'],
         l => {
-          if (errors) l = l.set('errors', errors);
-          if (upsertAccount) l = l.update('data', data => data.push(upsertAccount));
+          if (errors) l = l.set('errors', fromJS(errors));
+          if (upsertAccount) l = l.update('data', data => data.push(fromJS(upsertAccount)));
           return l;
         }
       );
@@ -60,16 +61,34 @@ function reducers(state, action) {
       state = state.updateIn(
         ['reduxAsyncConnect', 'accounts'],
         l => {
-          if (errors) l = l.set('errors', errors);
+          if (errors) l = l.set('errors', fromJS(errors));
           if (upsertAccount) {
             const index = l
               .get('data', [])
               .findIndex(a => a.get('id') === upsertAccount.id);
-            l = l.setIn(['data', index], upsertAccount);
+            l = l.setIn(['data', index], fromJS(upsertAccount));
           }
           return l;
         }
       );
+
+      return state;
+    }
+
+    case DELETE_ACCOUNTS: {
+      const {
+        data = {}
+      } = payload;
+
+      const accountDataPath = ['reduxAsyncConnect', 'accounts', 'data'];
+      let deleteAccounts = (data.deleteAccounts || [])
+        .map(a => +a.id);
+
+      const accounts = state
+        .getIn(accountDataPath, Immutable.Map())
+        .filter(a => !~deleteAccounts.indexOf(+a.get('id')));
+
+      state = state.setIn(accountDataPath, accounts);
 
       return state;
     }

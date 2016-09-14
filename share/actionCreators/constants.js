@@ -32,7 +32,8 @@ const constants = trap(mirror([
   'SIGNUP',
   'LOGIN',
   'ADD_ACCOUNT',
-  'UPDATE_ACCOUNT'
+  'UPDATE_ACCOUNT',
+  'DELETE_ACCOUNTS'
 ]));
 
 // Because of some magic ,using CommonJS here.

@@ -36,8 +36,8 @@ export default class AccountForm extends React.Component {
     if (errors && errors.size) {
       component = (
         <ul>
-          {errors.map(e => (
-            <li>Error: {e.get('message')}</li>
+          {errors.map((e, index) => (
+            <li key={index}>Error: {e.get('message')}</li>
           ))}
         </ul>
       );
