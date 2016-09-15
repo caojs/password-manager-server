@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
+import shallowCompare from 'react-addons-shallow-compare';
 import { injectProps } from '../../helpers/decorators';
 
 export default class Item extends React.Component {
@@ -15,13 +16,17 @@ export default class Item extends React.Component {
     this.onDelete = this.onDelete.bind(this);
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return shallowCompare(this, nextProps, nextState);
+  }
+
   @injectProps
   render({ data, checked }) {
     const {
       id,
       title,
       account
-    } = data.toObject();
+    } = data;
     const idName = this.toId(id);
 
     return (
@@ -53,7 +58,7 @@ export default class Item extends React.Component {
       data,
       onChange
     } = this.props;
-    onChange(data.get('id'), e.target.checked);
+    onChange(data.id, e.target.checked);
   }
 
   onDelete() {
@@ -61,7 +66,7 @@ export default class Item extends React.Component {
       data,
       onDelete
     } = this.props;
-    onDelete(data.get('id'));
+    onDelete(data.id);
   }
 
   toId(id) {

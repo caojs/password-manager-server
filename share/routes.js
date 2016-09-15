@@ -27,16 +27,19 @@ export default function routes(store) {
         onEnter={storeContext(LogIn.onEnter)}/>
       <Route path='404' component={NotFound}/>
       <Route
-        component={Dashboard}
-        onEnter={storeContext(Dashboard.onEnter)}>
+        onEnter={storeContext(Dashboard.onEnter)}
+        components={{
+          main: Dashboard,
+          child: Sidebar
+        }}>
         <IndexRoute
-          components={{ sidebar: Sidebar, main: AddForm }}/>
+          component={AddForm}/>
         <Route
           path='edit/:id'
-          components={{ sidebar: Sidebar, main: UpdateForm }}/>
+          component={UpdateForm}/>
         <Route
           path='account/:id'
-          components={{ sidebar: Sidebar, main: AccountInfo }}/>
+          component={AccountInfo}/>
       </Route>
       <Redirect from='*' to='/404'/>
     </Route>

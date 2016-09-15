@@ -7,33 +7,34 @@ import { graphPost } from '../../api';
 import { deleteAccounts } from '../../actionCreators';
 import { argsify } from '../../helpers/qlHelpers';
 
-@asyncConnect([
-  {
+@asyncConnect(
+  [{
     key: 'accounts',
-    promise: (props) => {
-      return graphPost(`
-        {
-          accounts {
-            id,
-            title,
-            info,
-            account,
-            password
-          }
-        }`
-      )
-      .then(json => {
-        const { data } = json;
-        if (data) json.data = data.accounts;
-        return json;
-      });
+    promise: ({ store: { getState }}) => {
+      const state = getState();
+      const accountsLoadState = state.getIn(['reduxAsyncConnect', 'loadState', 'accounts'], Immutable.Map());
+      return accountsLoadState.get('loaded') ?
+        state.getIn(['reduxAsyncConnect', 'accounts']) :
+        graphPost(`
+          {
+            accounts {
+              id,
+              title,
+              info,
+              account,
+              password
+            }
+          }`
+        )
+        .then(json => {
+          const { data } = json;
+          if (data) json.data = data.accounts;
+          return json;
+        });
     }
-  }
-])
-@connect(
+  }],
   state => ({
-    username: state.getIn(['user', 'data', 'username']),
-    accounts: state.getIn(['reduxAsyncConnect', 'accounts'], Immutable.Map())
+    username: state.getIn(['user', 'data', 'username'])
   }),
   (dispatch) => ({
     deleteAccounts: (ids) => dispatch(deleteAccounts(`

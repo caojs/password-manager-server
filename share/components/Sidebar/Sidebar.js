@@ -1,5 +1,6 @@
 import React from 'react';
 import Immutable from 'immutable';
+import { Link } from 'react-router';
 import { injectProps } from '../../helpers/decorators';
 import SideItem from './SideItem';
 import { deleteAccount, deleteAccounts } from '../../actionCreators';
@@ -18,15 +19,15 @@ class Sidebar extends React.Component {
     } = this.props;
 
     if (!Immutable.is(accounts, oldAccounts)) {
-      const odata = oldAccounts.get('data');
-      const ndata = accounts.get('data');
+      const odata = oldAccounts.data;
+      const ndata = accounts.data;
       let { selectedItem } = this.state;
 
       odata
         .forEach(oa => {
-          const index = ndata.findIndex(na => na.get('id') === oa.get('id'));
+          const index = ndata.findIndex(na => na.id === oa.id);
           if (!~index) {
-            selectedItem = selectedItem.delete(oa.get('id'));
+            selectedItem = selectedItem.delete(oa.id);
           }
         });
 
@@ -37,9 +38,9 @@ class Sidebar extends React.Component {
   @injectProps
   render({ username, accounts }) {
     const {
-      data = Immutable.List(),
-      errors = Immutable.List()
-    } = accounts.toObject();
+      data,
+      errors
+    } = accounts;
 
     const { selectedItem } = this.state;
 
@@ -50,19 +51,22 @@ class Sidebar extends React.Component {
           <a href="/logout">Log out</a>
         </div>
 
-        {
-          selectedItem.size ? (
-            <button onClick={() => this.onDelete(selectedItem)}>
-            Delete
-            </button>
-          ) : null
-        }
+        <ul>
+          <Link to="/">New</Link>
+          {
+            selectedItem.size ? (
+              <button onClick={() => this.onDelete(selectedItem)}>
+                Delete
+              </button>
+            ) : null
+          }
+        </ul>
 
         <ul>
           {
-            errors.size ?
+            errors ?
               errors.map((e, i) => (
-                <li key={i}>{e.get('message')}</li>
+                <li key={i}>{e.message}</li>
               )) :
               null
           }
@@ -70,12 +74,12 @@ class Sidebar extends React.Component {
 
         <ul>
           {
-            data.size ?
+            data ?
               data.map(account => (
                 <SideItem
-                  key={account.get('id')}
+                  key={account.id}
                   data={account}
-                  checked={selectedItem.get(account.get('id'))}
+                  checked={selectedItem.get(account.id)}
                   onChange={this.onChange}
                   onDelete={this.onDelete}/>
               )) :

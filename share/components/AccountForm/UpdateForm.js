@@ -4,13 +4,14 @@ import { asyncConnect } from 'redux-connect';
 import { reduxForm } from 'redux-form/immutable';
 import Immutable from 'immutable';
 
+import AccountForm from './AccountForm';
+import redirectTo from '../redirectTo';
 import { argsify } from '../../helpers/qlHelpers';
 import { updateAccount } from '../../actionCreators';
-import AccountForm from './AccountForm';
 import { graphPost } from '../../api';
 
-@asyncConnect([
-  {
+@asyncConnect(
+  [{
     key: 'accountData',
     promise: ({ params }) => {
       const { id } = params || {};
@@ -35,13 +36,25 @@ import { graphPost } from '../../api';
         return json;
       });
     }
+  }],
+  state => {
+    const accountData = state.getIn(['reduxAsyncConnect', 'accountData']) || Immutable.Map();
+    return {
+      accounts: state.getIn(['reduxAsyncConnect', 'accounts', 'data'], Immutable.List()),
+      errors: accountData.get('errors'),
+      initialValues: accountData.get('data', Immutable.Map())
+    }
   }
-])
-@connect(state => {
-  const res = state.getIn(['reduxAsyncConnect', 'accountData']) || Immutable.Map();
-  return {
-    errors: res.get('errors'),
-    initialValues: res.get('data', Immutable.Map())
+)
+@redirectTo('/', (newProps, oldProps) => {
+  const {
+    params: { id } = {},
+    accounts,
+  } = newProps;
+
+  if (!Immutable.is(accounts, oldProps.accounts)) {
+    const index = accounts.findIndex(a => a.get('id') === id);
+    return index < 0;
   }
 })
 @reduxForm({

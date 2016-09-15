@@ -1,9 +1,9 @@
 import React from 'react';
 
-function Layout({ children }) {
+function Layout({ children, main, child, ...rest }) {
   return (
     <div>
-      {children}
+      {children || React.cloneElement(main, { sidebar: child })}
     </div>
   );
 }

@@ -43,7 +43,7 @@ function reducers(state, action) {
       state = state.updateIn(
         ['reduxAsyncConnect', 'accounts'],
         l => {
-          if (errors) l = l.set('errors', fromJS(errors));
+          l = l.set('errors', errors ? fromJS(errors) : null);
           if (upsertAccount) l = l.update('data', data => data.push(fromJS(upsertAccount)));
           return l;
         }
@@ -61,7 +61,7 @@ function reducers(state, action) {
       state = state.updateIn(
         ['reduxAsyncConnect', 'accounts'],
         l => {
-          if (errors) l = l.set('errors', fromJS(errors));
+          l = l.set('errors', errors ? fromJS(errors) : null);
           if (upsertAccount) {
             const index = l
               .get('data', [])

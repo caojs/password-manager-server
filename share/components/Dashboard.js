@@ -1,11 +1,13 @@
 import React from 'react';
 
-const Dashboard = ({ sidebar, main }) => (
+const Dashboard = ({ children, sidebar }) => {
+  return (
   <div>
     {sidebar}
-    {main}
+    {children}
   </div>
-);
+)
+};
 
 Dashboard.onEnter = (nextState, replace, { getState }) => {
   const user = getState().getIn(['user', 'data']);
