@@ -10,6 +10,7 @@ module.exports = require('./base')({
   entry: [
     'eventsource-polyfill', // Necessary for hot reloading with IE
     'webpack-hot-middleware/client',
+    'react-hot-loader/patch',
     path.join(process.cwd(), 'client/clientRender.js'), // Start with js/app.js
   ],
 
@@ -42,9 +43,7 @@ module.exports = require('./base')({
 
   // Tell babel that we want to hot-reload
   babelQuery: {
-    presets: [
-      'react-hmre'
-    ],
+    "plugins": ["react-hot-loader/babel"]
   },
 
   // Emit a source map for easier debugging

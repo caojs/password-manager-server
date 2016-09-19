@@ -2,6 +2,7 @@ import React, { createElement } from 'react';
 import { unmountComponentAtNode, render } from 'react-dom';
 import { Router, browserHistory } from 'react-router';
 import { ReduxAsyncConnect } from 'redux-connect';
+import { AppContainer } from 'react-hot-loader';
 
 import getRoutes from '../share/routes.js';
 import createStore from '../share/store.js';
@@ -25,36 +26,29 @@ function featuresDetect() {
   });
 }
 
-function renderAll(store, routes) {
-  const root = (
-    <Root store={store}>
-      <Router
-        history={browserHistory}
-        routes={routes}
-        render={(props) => <ReduxAsyncConnect {...props}/>}/>
-    </Root>
-  );
-  const app = document.getElementById('app');
-  unmountComponentAtNode(app);
-  render(root, app);
-
-  console.group('%cApp:', 'color: orange');
-  console.info('Unmount and rerender app.');
-  console.warn('Store still remains.');
-  console.groupEnd();
+function createApp(store, routes) {
+  return (
+    <AppContainer>
+      <Root store={store}>
+        <Router
+          history={browserHistory}
+          routes={routes}
+          render={(props) => <ReduxAsyncConnect {...props}/>}/>
+      </Root>
+    </AppContainer>
+  )
 }
 
 featuresDetect()
   .then(function() {
-    renderAll(store, routes);
+
+    render(createApp(store, routes), document.getElementById('app'));
 
     if (module.hot) {
-      module.hot.accept();
-
-      // React-router doesn't accept to change routes props.
-      // Everytime routes module changes, we will force full rerender.
-      module.hot.accept('../share/routes.js', () => {
-        renderAll(store, require('../share/routes.js').default(store));
+      module.hot.accept([ '../share/routes.js' ], () => {
+        const getRoutes = require('../share/routes.js').default;
+        const newRoutes = getRoutes(store);
+        render(createApp(store, newRoutes), document.getElementById('app'));
       });
     }
   });

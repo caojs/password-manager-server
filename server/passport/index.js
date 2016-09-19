@@ -11,7 +11,7 @@ passport.deserializeUser(function(id, done) {
   new User({ id })
     .fetch()
     .then(function (user) {
-      done(null, user);
+      done(null, user && user.toJSON());
     })
     .catch(err => done(err));
 });
