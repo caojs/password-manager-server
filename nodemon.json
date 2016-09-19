@@ -1,0 +1,15 @@
+{
+  "execMap": {
+  },
+  "ignore": [],
+  "verbose": true,
+  "events": {
+  },
+  "watch": [
+    "server"
+  ],
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "ext": "js es6 jsx json"
+}

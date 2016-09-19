@@ -3,11 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev:server": "cross-env DISABLE_SSR=true pm2 start ./pm2/process.json && pm2 logs app --lines 0",
-    "dev:server-ssr": "cross-env pm2 start ./pm2/process.json && pm2 logs app --lines 0",
+    "dev:server": "cross-env DISABLE_SSR=true nodemon",
+    "dev:server-ssr": "cross-env nodemon",
     "start": "npm run dev:server",
     "start:ssr": "npm run dev:server-ssr",
-    "stop": "pm2 delete ./pm2/process.json",
     "live:build": "cross-env NODE_ENV=production webpack --config ./webpack/prod.js --display-modules",
     "live:server": "cross-env NODE_ENV=production node index.js",
     "go": "npm run live:build && npm run live:server"
@@ -51,7 +50,7 @@
     "morgan": "~1.7.0",
     "passport": "0.3.2",
     "passport-local": "1.0.0",
-    "react": "15.3.0",
+    "react": "15.3.1",
     "react-addons-shallow-compare": "15.3.1",
     "react-dom": "15.3.0",
     "react-redux": "4.4.5",
