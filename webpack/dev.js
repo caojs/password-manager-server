@@ -30,7 +30,11 @@ module.exports = require('./base')({
     }),
   ],
 
-  cssLoaders: 'style!css?localIdentName=[local]__[path][name]__[hash:base64:5]&modules&importLoaders=1&sourceMap!postcss',
+  cssLoaders: [
+    'style',
+    'css?localIdentName=[local]__[path][name]__[hash:base64:5]&modules&importLoaders=1&sourceMap',
+    'postcss'
+  ].join('!'),
 
   postcssPlugins: [
     cssnext({

@@ -1,0 +1,41 @@
+.main {
+  width: 600px;
+  height: 400px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid #c0c0c0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.bar {
+  padding: 5px 10px;
+  background: linear-gradient(#ebebeb, #d6d6d6);
+}
+
+.inner {
+  position: absolute;
+  top: 30px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.close {
+  padding: 2px;
+  border-radius: 50%;
+  background: #ff281f;
+  font-size: 8px;
+  margin-right: 6px;
+}
+
+.minus {
+  padding: 2px;
+  border-radius: 50%;
+  background: #feb700;
+  font-size: 8px;
+}

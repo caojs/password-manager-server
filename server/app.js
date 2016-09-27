@@ -1,4 +1,8 @@
 require('babel-register');
+require('css-modules-require-hook')({
+  generateScopedName: '_[hash:base64:5]',
+  prepend: [ require('postcss-cssnext') ]
+});
 require('isomorphic-fetch');
 
 const path = require('path');

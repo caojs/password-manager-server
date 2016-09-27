@@ -44,6 +44,10 @@ module.exports = (options) => ({
     }],
   },
 
+  postcss: function() {
+    return options.postcssPlugins;
+  },
+
   plugins: options.plugins.concat([
     new webpack.DefinePlugin({
       'process.env': {

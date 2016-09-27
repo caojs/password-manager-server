@@ -1,0 +1,62 @@
+.main {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.field {
+  padding: 5px;
+  border-radius: 10px;
+  border: 5px solid #d6d6d6;
+  overflow: hidden;
+}
+
+.label {
+  position: relative;
+  display: block;
+  min-width: 200px;
+  &:first-child {
+    border-bottom: 1px solid #ebebeb;
+  }
+}
+
+.user,
+.lock {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+}
+
+.input {
+  display: block;
+  width: 100%;
+  border: 0;
+  padding: 10px 20px 10px 40px;
+  box-sizing: border-box;
+  outline: none;
+  background-color: white;
+}
+
+.button {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 10px 20px;
+  border: 0;
+  border-radius: 20px;
+  color: white;
+  text-transform: uppercase;
+  background-color: #51d26e;
+  box-shadow: 0px 3px 12px 0px rgba(116,210,111,0.8);
+  cursor: pointer;
+}
+
+.links {
+  margin-top: 10px;
+  & :global(.link) {
+    color: #929292;
+    font-size: 14px;
+  }
+}

@@ -22,7 +22,7 @@ module.exports = require('./base')({
 
   cssLoaders: ExtractTextPlugin.extract(
     'style',
-    'css?modules&-autoprefixer&importLoaders=1',
+    'css?localIdentName=_[hash:base64:5]&modules&-autoprefixer&importLoaders=1',
     'postcss'
   ),
 

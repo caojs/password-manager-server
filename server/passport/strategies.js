@@ -10,12 +10,12 @@ passport.use(new LocalStrategy(function(username, password, done) {
     .fetch()
     .then(user => {
       if (!user)
-        return done(null, false, { message: 'User does\'t exist.' });
+        return done(null, false, { message: 'User doesn\'t exist.' });
 
       compareAsync(password, user.get('password'))
         .then(result => {
           if (!result)
-            return done(null, false, { message: 'Password doen\'t match' });
+            return done(null, false, { message: 'Password doesn\'t match.' });
           done(null, user.toJSON());
         });
     })
