@@ -28,6 +28,13 @@ function signup(req, res, next) {
     passwordAgain
   } = req.body;
 
+  if (!username || !password || !passwordAgain) {
+    return res.json(actionFromServer(
+      { errors: [{ message: 'Missing credential.' }]},
+      { type: SIGNUP }
+    ));
+  }
+
   return canCreate(username, password, passwordAgain)
     .then(({ info: message, user }) => {
 

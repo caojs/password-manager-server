@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const postcssImport = require('postcss-import');
 const cssnext = require('postcss-cssnext');
 const postcssReporter = require('postcss-reporter');
 
@@ -26,14 +27,19 @@ module.exports = require('./base')({
     'postcss'
   ),
 
-  postcssPlugins: [
-    cssnext({
-      browsers: ['last 2 versions', 'IE > 10'],
-    }),
-    postcssReporter({
-      clearMessages: true,
-    }),
-  ],
+  postcssPlugins: function(webpack) {
+    return [
+      postcssImport({
+        addDependencyTo: webpack
+      }),
+      cssnext({
+        browsers: ['last 2 versions', 'IE > 10'],
+      }),
+      postcssReporter({
+        clearMessages: true,
+      }),
+    ];
+  },
 
   plugins: [
     new webpack.optimize.CommonsChunkPlugin({

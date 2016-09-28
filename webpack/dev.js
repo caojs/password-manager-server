@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const cssnext = require('postcss-cssnext');
+const postcssImport = require('postcss-import');
 const postcssReporter = require('postcss-reporter');
 
 
@@ -36,14 +37,20 @@ module.exports = require('./base')({
     'postcss'
   ].join('!'),
 
-  postcssPlugins: [
-    cssnext({
-      browsers: ['last 2 versions', 'IE > 10'], // ...based on this browser list
-    }),
-    postcssReporter({ // Posts messages from plugins to the terminal
-      clearMessages: true,
-    }),
-  ],
+  postcssPlugins: function(webpack) {
+    return [
+      postcssImport({
+        addDependencyTo: webpack,
+        path: 'share/components'
+      }),
+      cssnext({
+        browsers: ['last 2 versions', 'IE > 10'], // ...based on this browser list
+      }),
+      postcssReporter({ // Posts messages from plugins to the terminal
+        clearMessages: true,
+      }),
+    ];
+  },
 
   // Tell babel that we want to hot-reload
   babelQuery: {

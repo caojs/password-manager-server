@@ -44,9 +44,7 @@ module.exports = (options) => ({
     }],
   },
 
-  postcss: function() {
-    return options.postcssPlugins;
-  },
+  postcss: options.postcssPlugins,
 
   plugins: options.plugins.concat([
     new webpack.DefinePlugin({
