@@ -1,5 +1,6 @@
 import React from 'react';
 import { injectProps } from '../../helpers/decorators';
+import style from './AccountInfo.css';
 
 function Item({ label, value }) {
   return (
@@ -27,7 +28,7 @@ class AccountInfo extends React.Component {
     }
     else {
       component = (
-        <ul>
+        <ul className={style.main}>
           <Item label="Title:" value={data.get('title')}/>
           <Item label="Account:" value={data.get('account')}/>
           <Item label="Password:" value={data.get('password')}/>

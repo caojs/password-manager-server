@@ -2,6 +2,7 @@ import React from 'react';
 import { Field } from 'redux-form/immutable';
 import PasswordGenerator from '../PasswordGenerator';
 import { injectProps } from '../../helpers/decorators';
+import style from './Form.css';
 
 function Form({ handleSubmit }) {
   return (
@@ -44,7 +45,7 @@ export default class AccountForm extends React.Component {
     }
     else {
       component = (
-        <div>
+        <div className={style.main}>
           <PasswordGenerator onCopy={value => dispatch(change('password', value))}/>
           <Form handleSubmit={handleSubmit}/>
         </div>

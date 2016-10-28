@@ -1,8 +1,9 @@
 import React from 'react';
+import style from './Dashboard.css';
 
 const Dashboard = ({ children, sidebar }) => {
   return (
-  <div>
+  <div className={style.dashboard}>
     {sidebar}
     {children}
   </div>

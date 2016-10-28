@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import shallowCompare from 'react-addons-shallow-compare';
 import { injectProps } from '../../helpers/decorators';
+import style from './SideItem.css';
 
 export default class Item extends React.Component {
   static propTypes = {

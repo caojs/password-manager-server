@@ -1,0 +1,74 @@
+.main {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 200px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border-right: 1px solid #e4e4e4;
+}
+
+.user {
+  position: relative;
+  padding: 10px;
+  background: #373942;
+  color: #b9c1d4;
+  & span {
+    font-weight: bold;
+  }
+
+  & a {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    color: #ccd5ea;
+  }
+}
+
+.actions {
+  padding: 10px;
+  margin: 0;
+  list-style: none;
+
+  & li {
+    display: inline-block;
+    margin-right: 6px;
+  }
+
+  & a,
+  & button {
+    display: block;
+    background: none;
+    border: 0;
+    font-size: 0.7em;
+    font-family: sans-serif;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  & :global(.add-item) {
+    padding: 8px 12px;
+    background: #51d26e;
+    border-radius: 3px;
+    color: white;
+  }
+
+  & :global(.delete-all) {
+    color: red;
+  }
+}
+
+.list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+
+  & li {
+    padding: 10px;
+    &:hover {
+      background-color: white;
+    }
+  }
+}
